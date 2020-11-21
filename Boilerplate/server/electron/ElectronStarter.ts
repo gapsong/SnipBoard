@@ -12,7 +12,7 @@ interface Rectangle {
 }
 interface ViewConfig {
     url: string;
-    coords: Rectangle;
+    coords?: Rectangle;
 }
 
 let mainWindow: BrowserWindow;
@@ -31,7 +31,26 @@ const createView = () => {
             preload: path.join(__dirname, 'Preload.js'),
         },
     });
+
+
+    const secondView = new BrowserView({
+        webPreferences: {
+            nodeIntegration: true,
+            webviewTag: true,
+            zoomFactor: 1.0,
+            enableRemoteModule: true,
+        },
+    });
+    mainWindow.addBrowserView(secondView);
+    secondView.setBounds({ x: 0, y: 0, width: 500, height: 400 });
+    console.log(__dirname)
+    secondView.webContents.loadURL(
+        `file://${__dirname}/public/index.html?innerWidth=${500}&innerHeight=${500}&scrollLeft?${0}&scrollTop?${0}&url=https://soundcloud.com`
+    );
+
+
     const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../client/index.html')}`;
+    
     mainWindow.loadURL(startUrl);
 
     // development

@@ -60,6 +60,11 @@ const DraggableView: React.FunctionComponent = () => {
                 }}
                 size={{ width, height }}
                 position={{ x, y }}
+                onDrag={(e, d) => {
+                    setX(d.x);
+                    setY(d.y);
+                    updateView();
+                }}
                 onDragStop={(e, d) => {
                     setX(d.x);
                     setY(d.y);
