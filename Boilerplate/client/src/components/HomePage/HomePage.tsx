@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Draggable } from './Draggable';
 
+// eslint-disable-next-line no-underscore-dangle
+// @ts-ignore
+window.api.response('fromMain', (data) => {
+    console.log(`Received ${data} from main process`);
+});
+
 const HomePage: React.FunctionComponent = () => {
     const [greeting, setGreeting] = useState('testurl.com');
 
@@ -13,11 +19,6 @@ const HomePage: React.FunctionComponent = () => {
     };
 
     const onClick = () => {
-        // eslint-disable-next-line no-underscore-dangle
-        // @ts-ignore
-        window.api.response('fromMain', (data) => {
-            console.log(`Received ${data} from main process`);
-        });
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
         window.api.request('toMain', 'some data');
