@@ -41,6 +41,7 @@
     "electron-build-mac": "electron-builder -m && yarn run move-packages",
     "electron-build-win": "electron-builder -w && yarn run move-packages",
     "electron-build-linux": "electron-builder -l && yarn run move-packages",
+    "dev": "nodemon --ignore './dist/' -e ts  --exec \"yarn run build && cross-env ELECTRON_START_URL=http://localhost:3000 electron --inspect --trace-warnings ./dist/ElectronStarter.js\"",
     "electron-dev": "yarn run build && cross-env ELECTRON_START_URL=http://localhost:3000 electron --inspect --trace-warnings ./dist/ElectronStarter.js",
     "test": "mocha",
     "test-coverage": "nyc yarn run test"
@@ -76,6 +77,8 @@
     "cors": "^2.8.5",
     "debug": "^4.1.1",
     "electron-is-dev": "^1.2.0",
-    "morgan": "^1.10.0"
+    "electron-reload": "^1.5.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
   }
 }

@@ -3,11 +3,13 @@ import { BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import path from 'path';
 
+require('electron-reload')(__dirname);
+
 let mainWindow: BrowserWindow;
 
 const createView = () => {
     mainWindow = new BrowserWindow({
-        width: 800,
+        width: 900,
         height: 600,
         webPreferences: {
             nodeIntegration: false,
@@ -17,6 +19,7 @@ const createView = () => {
         },
     });
     const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../client/index.html')}`;
+    console.log(startUrl);
     mainWindow.loadURL(startUrl);
 
     // development
