@@ -1,17 +1,11 @@
-import debug from 'debug';
 import Electron from 'electron';
 import isDev from 'electron-is-dev';
 import path from 'path';
-
-let logger: debug.Debugger;
 
 export default class Main {
     private static application: Electron.App;
     private static BrowserWindow: typeof Electron.BrowserWindow;
     private static mainWindow: Electron.BrowserWindow;
-
-    // if this variable is set to true in the main constructor, the app will quit when closing it in macOS
-    private static quitOnCloseOSX: boolean;
 
     public static main(app: Electron.App, browserWindow: typeof Electron.BrowserWindow) {
         Main.BrowserWindow = browserWindow;
@@ -19,19 +13,9 @@ export default class Main {
         Main.application.on('window-all-closed', Main.onWindowAllClosed);
         Main.application.on('ready', Main.onReady);
         Main.application.on('activate', Main.onActivate);
-        Main.quitOnCloseOSX = true;
     }
 
     private static onReady() {
-        // development
-        if (isDev) {
-            const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
-            // extensions
-            installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-                .then((name: string) => logger.log(`Added Extension: ${name}`))
-                .catch((err: any) => logger.log('An error occurred: ', err));
-        }
-
         Main.mainWindow = new Main.BrowserWindow({
             width: 800,
             height: 600,
@@ -54,7 +38,7 @@ export default class Main {
     }
 
     private static onWindowAllClosed() {
-        if (process.platform !== 'darwin' || Main.quitOnCloseOSX) {
+        if (process.platform !== 'darwin') {
             Main.application.quit();
         }
     }
