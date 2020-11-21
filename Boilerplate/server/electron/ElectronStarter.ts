@@ -9,6 +9,8 @@ let mainWindow: BrowserWindow;
 
 const createView = () => {
     mainWindow = new BrowserWindow({
+        x: 5000,
+        y: 5000,
         width: 900,
         height: 600,
         webPreferences: {
@@ -34,6 +36,6 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on('toMain', (event, args) => {
+ipcMain.on('addView', (event, args) => {
     mainWindow.loadURL(args);
 });

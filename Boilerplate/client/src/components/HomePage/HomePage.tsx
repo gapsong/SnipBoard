@@ -21,7 +21,7 @@ const HomePage: React.FunctionComponent = () => {
     const onClick = () => {
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
-        window.api.request('toMain', convertString(greeting));
+        window.api.request('addView', convertString(greeting));
     };
 
     return (
