@@ -3,8 +3,10 @@ import { BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import path from 'path';
 
+let mainWindow: BrowserWindow;
+
 const createView = () => {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -30,5 +32,5 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('toMain', (event, args) => {
-    console.log(args);
+    mainWindow.loadURL(args);
 });

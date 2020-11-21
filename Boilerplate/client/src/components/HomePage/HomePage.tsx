@@ -5,7 +5,7 @@ import { Draggable } from './Draggable';
 // eslint-disable-next-line no-underscore-dangle
 // @ts-ignore
 window.api.response('fromMain', (data) => {
-    console.log(`Received ${data} from main process`);
+    console.log(`Received ${data} from main prddocess`);
 });
 
 const HomePage: React.FunctionComponent = () => {
@@ -21,7 +21,7 @@ const HomePage: React.FunctionComponent = () => {
     const onClick = () => {
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
-        window.api.request('toMain', 'some data');
+        window.api.request('toMain', convertString(greeting));
     };
 
     return (
