@@ -5,7 +5,22 @@ interface Props {
     children?: React.ReactNode;
 }
 
-class Draggable extends React.Component<Props, { width: number | string; height: number | string; x: number; y: number }> {
+interface State {
+    width: number | string;
+    height: number | string;
+    x: number;
+    y: number;
+}
+
+const updateViewPosition = (viewport: State) => {
+    // eslint-disable-next-line no-underscore-dangle
+    // @ts-ignore
+    window.api.request('updateViewPosition', JSON.stringify(viewport));
+};
+
+
+
+class Draggable extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -37,16 +52,17 @@ class Draggable extends React.Component<Props, { width: number | string; height:
                     size={{ width: this.state.width, height: this.state.height }}
                     position={{ x: this.state.x, y: this.state.y }}
                     onDragStop={(e, d) => {
-                        console.log(d);
-                        this.setState({ x: d.x, y: d.y });
+                        this.setState({ x: d.x, y: d.y }, () => updateViewPosition(this.state));
                     }}
                     onResizeStop={(e, direction, ref, delta, position) => {
-                        console.log(delta);
-                        this.setState({
-                            width: ref.style.width,
-                            height: ref.style.height,
-                            ...position,
-                        });
+                        this.setState(
+                            {
+                                width: ref.style.width,
+                                height: ref.style.height,
+                                ...position,
+                            },
+                            () => updateViewPosition(this.state)
+                        );
                     }}
                 >
                     {this.props.children}{' '}

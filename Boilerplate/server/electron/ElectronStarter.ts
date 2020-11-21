@@ -4,8 +4,19 @@ import isDev from 'electron-is-dev';
 import path from 'path';
 
 require('electron-reload')(__dirname);
+interface Rectangle {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
+}
+interface ViewConfig {
+    url: string;
+    coords: Rectangle;
+}
 
 let mainWindow: BrowserWindow;
+let browserViews: Map<string, BrowserView> = new Map();
 
 const createView = () => {
     mainWindow = new BrowserWindow({
@@ -21,12 +32,11 @@ const createView = () => {
         },
     });
     const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../client/index.html')}`;
-    console.log(startUrl);
     mainWindow.loadURL(startUrl);
 
     // development
     if (isDev) {
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     }
 };
 
@@ -36,6 +46,22 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on('addView', (event, args) => {
-    mainWindow.loadURL(args);
+ipcMain.on('updateView', (event, rawViewConfig: string) => {
+    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
+    let browserView = browserViews.get(viewConfig.url);
+    if (browserView == undefined) {
+        browserView = new BrowserView({
+            webPreferences: {
+                nodeIntegration: true,
+                webviewTag: true,
+                zoomFactor: 1.0,
+                enableRemoteModule: true,
+            },
+        });
+        mainWindow.addBrowserView(browserView);
+        browserViews.set(viewConfig.url, browserView);
+    }
+
+    browserView.setBounds(viewConfig.coords);
+    browserView.webContents.loadURL(viewConfig.url);
 });
