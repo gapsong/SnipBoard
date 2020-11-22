@@ -87,19 +87,6 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
 ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
     let browserView = browserViews.get(viewConfig.url);
-    if (browserView == undefined) {
-        browserView = new BrowserView({
-            webPreferences: {
-                nodeIntegration: true,
-                webviewTag: true,
-                zoomFactor: 1.0,
-                enableRemoteModule: true,
-            },
-        });
-        mainWindow.addBrowserView(browserView);
-        browserViews.set(viewConfig.url, browserView);
-    }
 
     browserView.setBounds(viewConfig.coords);
-    browserView.webContents.loadURL(viewConfig.url);
 });
