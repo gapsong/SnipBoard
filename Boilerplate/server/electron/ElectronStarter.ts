@@ -32,25 +32,23 @@ const createView = () => {
         },
     });
 
-
-    const secondView = new BrowserView({
-        webPreferences: {
-            nodeIntegration: true,
-            webviewTag: true,
-            zoomFactor: 1.0,
-            enableRemoteModule: true,
-        },
-    });
-    mainWindow.addBrowserView(secondView);
-    secondView.setBounds({ x: 0, y: 0, width: 500, height: 400 });
-    console.log(__dirname)
-    secondView.webContents.loadURL(
-        `file://${__dirname}/public/index.html?innerWidth=${500}&innerHeight=${500}&scrollLeft?${0}&scrollTop?${0}&url=https://soundcloud.com`
-    );
-
+    // const secondView = new BrowserView({
+    //     webPreferences: {
+    //         nodeIntegration: true,
+    //         webviewTag: true,
+    //         zoomFactor: 1.0,
+    //         enableRemoteModule: true,
+    //     },
+    // });
+    // mainWindow.addBrowserView(secondView);
+    // secondView.setBounds({ x: 0, y: 0, width: 500, height: 400 });
+    // console.log(__dirname);
+    // secondView.webContents.loadURL(
+    //     `file://${__dirname}/public/index.html?innerWidth=${500}&innerHeight=${500}&scrollLeft?${0}&scrollTop?${0}&url=https://soundcloud.com`
+    // );
 
     const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../client/index.html')}`;
-    
+
     mainWindow.loadURL(startUrl);
 
     // development
@@ -65,7 +63,28 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on('updateView', (event, rawViewConfig: string) => {
+ipcMain.on('createView', (event, rawViewConfig: string) => {
+    console.log(rawViewConfig)
+    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
+    let browserView = browserViews.get(viewConfig.url);
+    if (browserView == undefined) {
+        browserView = new BrowserView({
+            webPreferences: {
+                nodeIntegration: true,
+                webviewTag: true,
+                zoomFactor: 1.0,
+                enableRemoteModule: true,
+            },
+        });
+        mainWindow.addBrowserView(browserView);
+        browserViews.set(viewConfig.url, browserView);
+    }
+
+    browserView.setBounds(viewConfig.coords);
+    browserView.webContents.loadURL(viewConfig.url);
+});
+
+ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
     let browserView = browserViews.get(viewConfig.url);
     if (browserView == undefined) {

@@ -1,24 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
+import { ViewConfig } from '../../common/types';
 
-interface Rectangle {
-    height: number;
-    width: number;
-    x: number;
-    y: number;
-}
-
-interface ViewConfig {
-    url: string;
-    coords: Rectangle;
-}
-
-// eslint-disable-next-line no-underscore-dangle
-// @ts-ignore
-window.api.response('fromMain', (data) => {
-    console.log(`Received ${data} from main prddocess`);
-});
 
 const convertString = (url: string) => {
     if (!/^http?:\/\//i.test(url)) {
@@ -30,7 +14,7 @@ const convertString = (url: string) => {
 const DraggableView: React.FunctionComponent = () => {
     const [urlValue, setGreeting] = useState('soundcloud.com');
     const [x, setX] = useState(10);
-    const [y, setY] = useState(10);
+    const [y, setY] = useState(60);
     const [width, setWidth] = useState(1000);
     const [height, setHeight] = useState(200);
 

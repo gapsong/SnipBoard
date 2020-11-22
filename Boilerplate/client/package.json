@@ -5,6 +5,7 @@
   "author": "Pablo Martinez",
   "license": "ISC",
   "scripts": {
+    "dev": "react-scripts start",
     "react-start": "react-scripts start",
     "move-client": "mv build ../server/dist/client || move build ../server/dist/client",
     "react-build": "react-scripts build && yarn run move-client",

@@ -1,40 +1,37 @@
-import React, { useState } from 'react';
-import { TextField, Button } from '@material-ui/core';
-import { Draggable } from './Draggable';
+import React, { useEffect } from 'react';
+import { Button } from '@material-ui/core';
+import { ViewConfig } from '../../common/types';
 import { DraggableView } from './DraggableView';
 
-// eslint-disable-next-line no-underscore-dangle
-// @ts-ignore
-window.api.response('fromMain', (data) => {
-    console.log(`Received ${data} from main prddocess`);
-});
-
-const convertString = (url: string) => {
-    if (!/^http?:\/\//i.test(url)) {
-        return 'https://' + url;
-    }
-    return url;
-};
+const sameFunc = () => {};
 
 const HomePage: React.FunctionComponent = () => {
-    const [urlValue, setGreeting] = useState('soundcloud.com');
+    useEffect(() => {
+        // @ts-ignore
+        window.api.response('fromMain', sameFunc);
+        // cleanup this component
+        return () => {
+            // @ts-ignore
+            window.api.removeListener('fromMain', sameFunc);
+        };
+    }, []);
 
-    const submitUrl = () => {
+    const createView = () => {
+        const viewConfig: ViewConfig = {
+            url: 'https://soundcloud.com',
+            coords: { x: 0, y: 0, width: 200, height: 200 },
+        };
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
-        window.api.request('addView', convertString(urlValue));
+        window.api.request('createView', JSON.stringify(viewConfig));
     };
 
     return (
         <div>
-            <DraggableView/>
-            {/* <Draggable>
-                <h1>{convertString(urlValue)}</h1>
-                <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
-                <Button variant='contained' color='primary' onClick={submitUrl}>
-                    open Browser
-                </Button>{' '}
-            </Draggable> */}
+            {/* <DraggableView /> */}
+            <Button variant='contained' color='primary' onClick={createView}>
+                Createview
+            </Button>
         </div>
     );
 };
