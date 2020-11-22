@@ -6,6 +6,12 @@ export interface Rectangle {
 }
 
 export interface ViewConfig {
+    key: number;
     url: string;
     coords: Rectangle;
+}
+
+export interface InventoryState {
+    readonly data: ViewConfig[];
+    readonly errors?: string;
 }

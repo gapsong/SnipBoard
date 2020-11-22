@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
-import { ViewConfig } from '../../common/types';
-
+import { ViewConfig } from '../../store/views/types';
 
 const convertString = (url: string) => {
     if (!/^http?:\/\//i.test(url)) {
@@ -20,12 +19,13 @@ const DraggableView: React.FunctionComponent = () => {
 
     const updateView = () => {
         const viewConfig: ViewConfig = {
+            key: 0,
             url: convertString(urlValue),
             coords: { x, y, width, height },
         };
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
-        window.api.request('updateView', JSON.stringify(viewConfig));
+        window.api.request('updateViewPosition', JSON.stringify(viewConfig));
     };
 
     return (
@@ -52,10 +52,12 @@ const DraggableView: React.FunctionComponent = () => {
                 onDragStop={(e, d) => {
                     setX(d.x);
                     setY(d.y);
+                    updateView();
                 }}
                 onResizeStop={(e, direction, ref, delta, position) => {
                     setWidth(parseInt(ref.style.width));
                     setHeight(parseInt(ref.style.height));
+                    updateView();
                 }}
             >
                 BrowserView

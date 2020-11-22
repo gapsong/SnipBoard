@@ -1,23 +1,26 @@
 import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import { ViewConfig } from '../../common/types';
+import { ViewConfig } from '../../store/views/types';
 import { DraggableView } from './DraggableView';
 
-const sameFunc = () => {};
+const sameFunc = (data: string) => {
+    console.log('called');
+    console.log(data);
+};
 
 const HomePage: React.FunctionComponent = () => {
     useEffect(() => {
         // @ts-ignore
-        window.api.response('fromMain', sameFunc);
-        // cleanup this component
+        window.api.response('initStore', sameFunc); // cleanup this component
         return () => {
             // @ts-ignore
-            window.api.removeListener('fromMain', sameFunc);
+            window.api.removeListener('initStore', sameFunc);
         };
     }, []);
 
     const createView = () => {
         const viewConfig: ViewConfig = {
+            key: 0,
             url: 'https://soundcloud.com',
             coords: { x: 0, y: 0, width: 200, height: 200 },
         };
@@ -28,7 +31,7 @@ const HomePage: React.FunctionComponent = () => {
 
     return (
         <div>
-            {/* <DraggableView /> */}
+            <DraggableView />
             <Button variant='contained' color='primary' onClick={createView}>
                 Createview
             </Button>

@@ -11,12 +11,13 @@ interface Rectangle {
     y: number;
 }
 interface ViewConfig {
+    key: number;
     url: string;
     coords?: Rectangle;
 }
 
 let mainWindow: BrowserWindow;
-let browserViews: Map<string, BrowserView> = new Map();
+let browserViews: BrowserView[] = [];
 
 const createView = () => {
     mainWindow = new BrowserWindow({
@@ -64,9 +65,9 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('createView', (event, rawViewConfig: string) => {
-    console.log(rawViewConfig)
+    console.log(rawViewConfig);
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
-    let browserView = browserViews.get(viewConfig.url);
+    let browserView = browserViews[viewConfig.key];
     if (browserView == undefined) {
         browserView = new BrowserView({
             webPreferences: {
@@ -77,16 +78,14 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
             },
         });
         mainWindow.addBrowserView(browserView);
-        browserViews.set(viewConfig.url, browserView);
+        browserViews.push(browserView);
     }
-
     browserView.setBounds(viewConfig.coords);
     browserView.webContents.loadURL(viewConfig.url);
 });
 
 ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
-    let browserView = browserViews.get(viewConfig.url);
-
+    let browserView = browserViews[viewConfig.key];
     browserView.setBounds(viewConfig.coords);
 });
