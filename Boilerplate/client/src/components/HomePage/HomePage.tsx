@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import { ViewConfig } from '../../store/views/types';
+import { ViewConfig } from '../../store/view/types';
 import { DraggableView } from './DraggableView';
 
-const sameFunc = (data: string) => {
+const initStore = (data: string) => {
     console.log('called');
     console.log(data);
 };
@@ -11,10 +11,10 @@ const sameFunc = (data: string) => {
 const HomePage: React.FunctionComponent = () => {
     useEffect(() => {
         // @ts-ignore
-        window.api.response('initStore', sameFunc); // cleanup this component
+        window.api.response('initStore', initStore); // cleanup this component
         return () => {
             // @ts-ignore
-            window.api.removeListener('initStore', sameFunc);
+            window.api.removeListener('initStore', initStore);
         };
     }, []);
 
