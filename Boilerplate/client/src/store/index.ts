@@ -9,13 +9,13 @@ import { InventoryState } from './inventory/types';
 import { cartReducer } from './cart/reducer';
 import { cartState } from './cart/types';
 
-import { ViewReducer } from './view/reducer';
-import { ViewState } from './view/types';
+import { DashboardReducer } from './view/reducer';
+import { DashboardState } from './view/types';
 
 export interface ApplicationState {
     cart: cartState;
     inventory: InventoryState;
-    view: ViewState;
+    dashboard: DashboardState;
     router?: RouterState;
 }
 
@@ -23,6 +23,6 @@ export const createRootReducer = (history: History) =>
     combineReducers({
         cart: cartReducer,
         inventory: InventoryReducer,
-        view: ViewReducer,
+        dashboard: DashboardReducer,
         router: connectRouter(history),
     });
