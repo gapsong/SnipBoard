@@ -1,4 +1,4 @@
-import { BrowserView, app, BrowserWindow, ipcMain } from 'electron';
+import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 
 import isDev from 'electron-is-dev';
 import path from 'path';
@@ -20,18 +20,30 @@ let mainWindow: BrowserWindow;
 let browserViews: BrowserView[] = [];
 
 const createView = () => {
-    mainWindow = new BrowserWindow({
-        x: 5000,
-        y: 5000,
-        width: 900,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: false,
-            worldSafeExecuteJavaScript: true,
-            contextIsolation: true,
-            preload: path.join(__dirname, 'Preload.js'),
-        },
-    });
+    var electronScreen = screen;
+    var displays = electronScreen.getAllDisplays();
+    var externalDisplay = null;
+    for (var i in displays) {
+        if (displays[i].bounds.x != 0 || displays[i].bounds.y != 0) {
+            externalDisplay = displays[i];
+            break;
+        }
+    }
+
+    if (externalDisplay) {
+        mainWindow = new BrowserWindow({
+            x: externalDisplay.bounds.x + 50,
+            y: externalDisplay.bounds.y + 50,
+            width: 900,
+            height: 600,
+            webPreferences: {
+                nodeIntegration: false,
+                worldSafeExecuteJavaScript: true,
+                contextIsolation: true,
+                preload: path.join(__dirname, 'Preload.js'),
+            },
+        });
+    }
 
     // const secondView = new BrowserView({
     //     webPreferences: {
@@ -91,8 +103,6 @@ ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
 });
 
 ipcMain.on('updateUrl', (event, rawViewConfig: string) => {
-    console.log('update url')
-
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
     let browserView = browserViews[viewConfig.key];
     browserView.webContents.loadURL(viewConfig.url);
