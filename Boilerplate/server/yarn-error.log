@@ -2,7 +2,7 @@ Arguments:
   /home/gapsong/.nvm/versions/node/v14.15.1/bin/node /usr/share/yarn/bin/yarn.js run build
 
 PATH: 
-  /home/gapsong/Documents/MonoRepo/Boilerplate/server/node_modules/.bin:/tmp/yarn--1605995201402-0.9415149133879757:/home/gapsong/Documents/MonoRepo/Boilerplate/server/node_modules/.bin:/home/gapsong/.config/yarn/link/node_modules/.bin:/home/gapsong/.yarn/bin:/home/gapsong/.nvm/versions/node/v14.15.1/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/gapsong/.nvm/versions/node/v14.15.1/lib/node_modules/npm/bin/node-gyp-bin:/home/gapsong/.nvm/versions/node/v14.15.1/bin/node_modules/npm/bin/node-gyp-bin:/opt/firefox/firefox:/home/gapsong/.nvm/versions/node/v14.15.1/bin:/home/gapsong/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  /home/gapsong/Documents/MonoRepo/Boilerplate/server/node_modules/.bin:/tmp/yarn--1606065697514-0.41047967807561947:/home/gapsong/Documents/MonoRepo/Boilerplate/server/node_modules/.bin:/home/gapsong/.config/yarn/link/node_modules/.bin:/home/gapsong/.yarn/bin:/home/gapsong/.nvm/versions/node/v14.15.1/libexec/lib/node_modules/npm/bin/node-gyp-bin:/home/gapsong/.nvm/versions/node/v14.15.1/lib/node_modules/npm/bin/node-gyp-bin:/home/gapsong/.nvm/versions/node/v14.15.1/bin/node_modules/npm/bin/node-gyp-bin:/opt/firefox/firefox:/home/gapsong/.nvm/versions/node/v14.15.1/bin:/home/gapsong/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
   1.22.4

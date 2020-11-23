@@ -7,8 +7,8 @@ export interface Rectangle {
 
 export interface ViewConfig {
     key: number;
-    url: string;
-    coords: Rectangle;
+    url?: string;
+    coords?: Rectangle;
 }
 
 export interface InventoryState {

@@ -89,3 +89,11 @@ ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
     let browserView = browserViews[viewConfig.key];
     browserView.setBounds(viewConfig.coords);
 });
+
+ipcMain.on('updateUrl', (event, rawViewConfig: string) => {
+    console.log('update url')
+
+    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
+    let browserView = browserViews[viewConfig.key];
+    browserView.webContents.loadURL(viewConfig.url);
+});

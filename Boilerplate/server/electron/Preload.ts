@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-let validChannels = ['initStore', 'updateViewPosition', 'createView'];
+let validChannels = ['updateUrl', 'initStore', 'updateViewPosition', 'createView'];
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object

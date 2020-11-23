@@ -17,7 +17,7 @@ const DraggableView: React.FunctionComponent = () => {
     const [width, setWidth] = useState(1000);
     const [height, setHeight] = useState(200);
 
-    const updateView = () => {
+    const updateViewPosition = () => {
         const viewConfig: ViewConfig = {
             key: 0,
             url: convertString(urlValue),
@@ -26,6 +26,14 @@ const DraggableView: React.FunctionComponent = () => {
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
         window.api.request('updateViewPosition', JSON.stringify(viewConfig));
+    };
+    const updateUrl = () => {
+        const viewConfig: ViewConfig = {
+            key: 0,
+            url: convertString(urlValue),
+        };
+        // @ts-ignore
+        window.api.request('updateUrl', JSON.stringify(viewConfig));
     };
 
     return (
@@ -47,17 +55,17 @@ const DraggableView: React.FunctionComponent = () => {
                 onDrag={(e, d) => {
                     setX(d.x);
                     setY(d.y);
-                    updateView();
+                    updateViewPosition();
                 }}
                 onDragStop={(e, d) => {
                     setX(d.x);
                     setY(d.y);
-                    updateView();
+                    updateViewPosition();
                 }}
                 onResizeStop={(e, direction, ref, delta, position) => {
                     setWidth(parseInt(ref.style.width));
                     setHeight(parseInt(ref.style.height));
-                    updateView();
+                    updateViewPosition();
                 }}
             >
                 BrowserView
@@ -73,8 +81,8 @@ const DraggableView: React.FunctionComponent = () => {
                 >
                     <h1>{convertString(urlValue)}</h1>
                     <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
-                    <Button variant='contained' color='primary' onClick={updateView}>
-                        updateView{' '}
+                    <Button variant='contained' color='primary' onClick={updateUrl}>
+                        update URl{urlValue}
                     </Button>{' '}
                 </div>
             </Rnd>
