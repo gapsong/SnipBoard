@@ -68,11 +68,16 @@ const createView = () => {
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send('initStore', storage.get('config'));
-
     });
     // development
     if (isDev) {
         mainWindow.webContents.openDevTools();
+
+        // Install React Dev Tools
+        const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+
+        installExtension(REACT_DEVELOPER_TOOLS);
+        installExtension(REDUX_DEVTOOLS);
     }
 };
 
