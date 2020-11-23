@@ -33,7 +33,7 @@
     }
   },
   "scripts": {
-    "copy": "cp -avr ./public ./dist/public",
+    "copy": "cp -avr ./public ./dist",
     "build": "yarn run copy && tsc -p tsconfig-build.json",
     "remove-package-folder": "rm -rf dist/packages",
     "move-packages": "cp -r dist/packages/.[0-z]* dist/packages/* ../dist && rm -rf dist/packages/*",
@@ -74,6 +74,8 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "@types/electron-json-storage": "^4.0.0",
+    "@types/electron-store": "^3.2.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "debug": "^4.1.1",

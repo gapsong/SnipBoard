@@ -4,3 +4,6 @@
 // `nodeIntegration` is turned off. Use `Preload.ts` to
 // selectively enable features needed in the rendering
 // process.
+
+
+console.log('window')

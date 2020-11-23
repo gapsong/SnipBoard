@@ -1,9 +1,12 @@
 import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
+import Store from 'electron-store';
 
 import isDev from 'electron-is-dev';
 import path from 'path';
 
 require('electron-reload')(__dirname);
+
+const storage = new Store();
 interface Rectangle {
     height: number;
     width: number;
@@ -63,10 +66,13 @@ const createView = () => {
     const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, '../client/index.html')}`;
 
     mainWindow.loadURL(startUrl);
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.send('initStore', storage.get('config'));
 
+    });
     // development
     if (isDev) {
-        // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     }
 };
 
@@ -77,7 +83,6 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('createView', (event, rawViewConfig: string) => {
-    console.log(rawViewConfig);
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
     let browserView = browserViews[viewConfig.key];
     if (browserView == undefined) {
@@ -94,6 +99,9 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
     }
     browserView.setBounds(viewConfig.coords);
     browserView.webContents.loadURL(viewConfig.url);
+
+    // Write
+    storage.set('config', viewConfig);
 });
 
 ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
