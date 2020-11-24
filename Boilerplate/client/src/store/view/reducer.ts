@@ -1,10 +1,5 @@
 import { Reducer } from 'redux';
-import { DashboardState } from './types';
-
-interface actionType {
-    type: string;
-    payload?: any;
-}
+import { DashboardActionTypes, DashboardState, actionType } from './types';
 
 export const initialState: DashboardState = {
     views: [],
@@ -12,7 +7,7 @@ export const initialState: DashboardState = {
 
 const reducer: Reducer<DashboardState> = (state = initialState, action: actionType) => {
     switch (action.type) {
-        case 'InitStore': {
+        case DashboardActionTypes.INIT_DASHBOARD: {
             return { ...state, views: action.payload };
         }
         default: {

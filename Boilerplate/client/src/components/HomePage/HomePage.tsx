@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { ViewConfig } from '../../store/view/types';
+import { initStore } from '../../store/view/action';
 import { DraggableView } from './DraggableView';
 
-const initStore = (data: string) => {
-    console.log('called');
-    console.log(data);
-};
-
 const HomePage: React.FunctionComponent = () => {
+    const dispatch = useDispatch();
+
+    const dispatchInitStore = (data: any) => dispatch(initStore(data));
+
     useEffect(() => {
         // @ts-ignore
-        window.api.response('initStore', initStore); // cleanup this component
+        window.api.response('initStore', dispatchInitStore); // cleanup this component
         return () => {
             // @ts-ignore
-            window.api.removeListener('initStore', initStore);
+            window.api.removeListener('initStore', dispatchInitStore);
         };
     }, []);
 

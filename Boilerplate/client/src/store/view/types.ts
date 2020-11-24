@@ -1,7 +1,8 @@
 export enum DashboardActionTypes {
-    FETCH_REQUEST = "@@inventory/FETCH_REQUEST",
-    FETCH_SUCCESS = "@@inventory/FETCH_SUCCESS",
-    FETCH_ERROR = "@@inventory/FETCH_ERROR"
+    FETCH_REQUEST = "@@dashboard/FETCH_REQUEST",
+    FETCH_SUCCESS = "@@dashboard/FETCH_SUCCESS",
+    FETCH_ERROR = "@@dashboard/FETCH_ERROR",
+    INIT_DASHBOARD = "@@dashboard/INIT"
 }
 
 export interface Rectangle {
@@ -19,4 +20,9 @@ export interface ViewConfig {
 
 export interface DashboardState {
     readonly views: ViewConfig[];
+}
+
+export interface actionType {
+    type: string;
+    payload?: any;
 }
