@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import HomePage from './components/HomePage/HomePage';
+import Dashboard from './components/Dashboard/Dashboard';
 
 const Routes: React.FunctionComponent = () => (
     <>
         <Switch>
-            <Route exact path="/" component={HomePage} />
+            <Route exact path="/" component={Dashboard} />
             <Route render={() => <Redirect to="/"/>}/>
         </Switch>
     </>

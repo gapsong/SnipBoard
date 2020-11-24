@@ -2,7 +2,7 @@ import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
 
-import { DashboardActionTypes, actionType } from './types';
+import { DashboardActionTypes, actionType, ViewConfig } from './types';
 import { ApplicationState } from '../index';
 
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
@@ -36,5 +36,21 @@ export const initStore = (data: string): actionType => {
     return {
         type: DashboardActionTypes.INIT_DASHBOARD,
         payload: data,
+    };
+};
+
+export const createView = (): actionType => {
+    const viewConfig: ViewConfig = {
+        key: 0,
+        url: 'https://soundcloud.com',
+        coords: { x: 0, y: 0, width: 200, height: 200 },
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    // @ts-ignore
+    window.api.request('createView', JSON.stringify(viewConfig));
+
+    return {
+        type: DashboardActionTypes.CREATE_VIEW,
+        payload: viewConfig,
     };
 };

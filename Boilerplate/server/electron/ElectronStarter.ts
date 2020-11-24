@@ -88,20 +88,20 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('createView', (event, rawViewConfig: string) => {
+    console.log('crate View');
     const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
-    let browserView = browserViews[viewConfig.key];
-    if (browserView == undefined) {
-        browserView = new BrowserView({
-            webPreferences: {
-                nodeIntegration: true,
-                webviewTag: true,
-                zoomFactor: 1.0,
-                enableRemoteModule: true,
-            },
-        });
-        mainWindow.addBrowserView(browserView);
-        browserViews.push(browserView);
-    }
+    let browserView = new BrowserView({
+        webPreferences: {
+            nodeIntegration: true,
+            webviewTag: true,
+            zoomFactor: 1.0,
+            enableRemoteModule: true,
+        },
+    });
+    mainWindow.addBrowserView(browserView);
+
+    browserViews.push(browserView);
+
     browserView.setBounds(viewConfig.coords);
     browserView.webContents.loadURL(viewConfig.url);
 
