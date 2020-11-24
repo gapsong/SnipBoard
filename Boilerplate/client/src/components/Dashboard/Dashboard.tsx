@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { initStore, createView } from '../../store/view/action';
+import { ViewConfig } from '../../store/view/types';
+import { ApplicationState } from '../../store';
 import { DraggableView } from './DraggableView';
 
 const Dashboard: React.FunctionComponent = () => {
     const dispatch = useDispatch();
+    const views = useSelector((state: ApplicationState) => state.dashboard.views);
 
     useEffect(() => {
         // @ts-ignore
@@ -21,7 +24,9 @@ const Dashboard: React.FunctionComponent = () => {
 
     return (
         <div>
-            <DraggableView />
+            {/* {views.map((view: ViewConfig) => (
+                <DraggableView {...view} />
+            ))} */}
             <Button variant='contained' color='primary' onClick={dispatchCreateView}>
                 Createview
             </Button>

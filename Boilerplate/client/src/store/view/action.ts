@@ -43,7 +43,10 @@ export const createView = (): actionType => {
     const viewConfig: ViewConfig = {
         key: 0,
         url: 'https://soundcloud.com',
-        coords: { x: 0, y: 0, width: 200, height: 200 },
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 200,
     };
     // eslint-disable-next-line no-underscore-dangle
     // @ts-ignore

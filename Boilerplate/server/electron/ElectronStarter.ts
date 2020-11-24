@@ -6,19 +6,21 @@ import path from 'path';
 
 require('electron-reload')(__dirname);
 
-const storage = new Store();
 interface Rectangle {
     height: number;
     width: number;
     x: number;
     y: number;
 }
-interface ViewConfig {
+
+interface Meta {
     key: number;
     url: string;
-    coords?: Rectangle;
 }
 
+export type ViewConfig = Meta & Rectangle ;
+
+const storage = new Store();
 let mainWindow: BrowserWindow;
 let browserViews: BrowserView[] = [];
 
@@ -88,8 +90,7 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('createView', (event, rawViewConfig: string) => {
-    console.log('crate View');
-    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
+    const { url, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
     let browserView = new BrowserView({
         webPreferences: {
             nodeIntegration: true,
@@ -102,21 +103,21 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
 
     browserViews.push(browserView);
 
-    browserView.setBounds(viewConfig.coords);
-    browserView.webContents.loadURL(viewConfig.url);
+    browserView.setBounds({ x, y, width, height });
+    browserView.webContents.loadURL(url);
 
     // Write
-    storage.set('config', viewConfig);
+    storage.set('config', rawViewConfig);
 });
 
 ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
-    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
-    let browserView = browserViews[viewConfig.key];
-    browserView.setBounds(viewConfig.coords);
+    const { key, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
+    let browserView = browserViews[key];
+    browserView.setBounds({ x, y, width, height });
 });
 
 ipcMain.on('updateUrl', (event, rawViewConfig: string) => {
-    const viewConfig: ViewConfig = JSON.parse(rawViewConfig);
-    let browserView = browserViews[viewConfig.key];
-    browserView.webContents.loadURL(viewConfig.url);
+    const { key, url }: ViewConfig = JSON.parse(rawViewConfig);
+    let browserView = browserViews[key];
+    browserView.webContents.loadURL(url);
 });

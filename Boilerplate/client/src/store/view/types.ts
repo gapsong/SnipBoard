@@ -6,18 +6,19 @@ export enum DashboardActionTypes {
     CREATE_VIEW = '@@dashboard/CREATE_VIEW',
 }
 
-export interface Rectangle {
+interface Rectangle {
     height: number;
     width: number;
     x: number;
     y: number;
 }
 
-export interface ViewConfig {
+interface Meta {
     key: number;
-    url?: string;
-    coords?: Rectangle;
+    url: string;
 }
+
+export type ViewConfig = Meta & Rectangle ;
 
 export interface DashboardState {
     readonly views: ViewConfig[];

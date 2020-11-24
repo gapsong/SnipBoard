@@ -10,30 +10,29 @@ const convertString = (url: string) => {
     return url;
 };
 
-const DraggableView: React.FunctionComponent = () => {
-    const [urlValue, setGreeting] = useState('soundcloud.com');
-    const [x, setX] = useState(10);
-    const [y, setY] = useState(60);
-    const [width, setWidth] = useState(1000);
-    const [height, setHeight] = useState(200);
+const DraggableView: React.FunctionComponent<ViewConfig> = (prop: ViewConfig) => {
+    const [urlValue, setGreeting] = useState(prop.url);
+    const [x, setX] = useState(prop.x);
+    const [y, setY] = useState(prop.y);
+    const [width, setWidth] = useState(prop.width);
+    const [height, setHeight] = useState(prop.height);
 
     const updateViewPosition = () => {
         const viewConfig: ViewConfig = {
             key: 0,
             url: convertString(urlValue),
-            coords: { x, y, width, height },
+            x,
+            y,
+            width,
+            height,
         };
         // eslint-disable-next-line no-underscore-dangle
         // @ts-ignore
         window.api.request('updateViewPosition', JSON.stringify(viewConfig));
     };
     const updateUrl = () => {
-        const viewConfig: ViewConfig = {
-            key: 0,
-            url: convertString(urlValue),
-        };
         // @ts-ignore
-        window.api.request('updateUrl', JSON.stringify(viewConfig));
+        window.api.request('updateUrl', JSON.stringify(convertString(urlValue)));
     };
 
     return (
