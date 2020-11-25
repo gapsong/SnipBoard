@@ -33,6 +33,7 @@
     }
   },
   "scripts": {
+    "webpack-build": "webpack --config ./webpack.config.js",
     "copy": "cp -avr ./public ./dist",
     "build": "yarn run copy && tsc -p tsconfig-build.json",
     "remove-package-folder": "rm -rf dist/packages",
@@ -44,6 +45,7 @@
     "electron-build-linux": "electron-builder -l && yarn run move-packages",
     "dev": "nodemon --ignore './dist/' -e ts  --exec \"yarn run build && cross-env ELECTRON_START_URL=http://localhost:3000 electron --inspect --trace-warnings ./dist/ElectronStarter.js\"",
     "electron-dev": "yarn run build && cross-env ELECTRON_START_URL=http://localhost:3000 electron --inspect --trace-warnings ./dist/ElectronStarter.js",
+    "webpack-dev": "webpack --watch",
     "test": "mocha",
     "test-coverage": "nyc yarn run test"
   },
@@ -70,8 +72,11 @@
     "mocha": "^8.1.1",
     "nyc": "^15.1.0",
     "source-map-support": "^0.5.19",
+    "ts-loader": "^8.0.11",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0"
   },
   "dependencies": {
     "@types/electron-json-storage": "^4.0.0",
@@ -82,6 +87,7 @@
     "electron-is-dev": "^1.2.0",
     "electron-reload": "^1.5.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "webpack-electron-reload": "^1.0.1"
   }
 }

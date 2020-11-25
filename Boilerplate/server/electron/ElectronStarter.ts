@@ -4,8 +4,6 @@ import Store from 'electron-store';
 import isDev from 'electron-is-dev';
 import path from 'path';
 
-require('electron-reload')(__dirname);
-
 interface Rectangle {
     height: number;
     width: number;
