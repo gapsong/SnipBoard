@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { initStore, createView } from '../../store/view/action';
-import { ViewConfig } from '../../store/view/types';
+import { ViewConfig } from '@types';
 import { ApplicationState } from '../../store';
 import { DraggableView } from './DraggableView';
 

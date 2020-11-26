@@ -1,6 +1,7 @@
 import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import isDev from 'electron-is-dev';
+import { ViewConfig } from '@types';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -8,20 +9,6 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
-
-interface Rectangle {
-  height: number;
-  width: number;
-  x: number;
-  y: number;
-}
-
-interface Meta {
-  key: number;
-  url: string;
-}
-
-export type ViewConfig = Meta & Rectangle;
 
 const storage = new Store();
 let mainWindow: BrowserWindow;
