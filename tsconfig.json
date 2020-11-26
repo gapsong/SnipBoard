@@ -16,6 +16,7 @@
       "*": ["node_modules/*"],
       "@app/*": ["./src/app/*"],
       "@static/*": ["./src/static/*"],
+      "@types": ["./src/common/types"],
       "@src/*": ["./src/*"]
     }
   },

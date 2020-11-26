@@ -1,4 +1,3 @@
-import logo from '@static/logo.png';
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import { Provider } from 'react-redux';

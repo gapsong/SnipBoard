@@ -22,7 +22,8 @@
         "map": [
           ["@src", "./src"],
           ["@app", "./src/app"],
-          ["@static", "./src/static"]
+          ["@static", "./src/static"],
+          ["@types", "./src/common/types"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
@@ -32,6 +33,7 @@
     }
   },
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }

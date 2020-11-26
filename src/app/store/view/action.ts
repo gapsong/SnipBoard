@@ -2,7 +2,8 @@ import { ActionCreator, Action, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
 
-import { DashboardActionTypes, actionType, ViewConfig } from './types';
+import { DashboardActionTypes, actionType } from './types';
+import { ViewConfig } from '@types';
 import { ApplicationState } from '../index';
 
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
