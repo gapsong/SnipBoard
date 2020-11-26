@@ -10,9 +10,15 @@ import installExtension, {
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
 
-const storage = new Store();
+interface ElectronStore {
+  viewConfigs: ViewConfig[];
+}
+const storage = new Store<ElectronStore>();
+
 let mainWindow: BrowserWindow;
 const browserViews: BrowserView[] = [];
+
+const viewConfigs =  storage.get('viewConfigs') || [];
 
 const createView = () => {
   const electronScreen = screen;
@@ -27,8 +33,8 @@ const createView = () => {
 
   if (externalDisplay) {
     mainWindow = new BrowserWindow({
-      x: externalDisplay.bounds.x + 50,
-      y: externalDisplay.bounds.y + 50,
+      x: externalDisplay.bounds.x + 1200,
+      y: externalDisplay.bounds.y + 300,
       width: 900,
       height: 600,
       webPreferences: {
@@ -59,7 +65,7 @@ const createView = () => {
 
   mainWindow.loadURL(startUrl);
   mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow.webContents.send('initStore', storage.get('config'));
+    mainWindow.webContents.send('initStore', viewConfigs);
   });
 
   if (isDev) {
@@ -86,7 +92,8 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('createView', (event, rawViewConfig: string) => {
-  const { url, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
+  const parsedJson = JSON.parse(rawViewConfig)
+  const { url, x, y, width, height }: ViewConfig = parsedJson;
   const browserView = new BrowserView({
     webPreferences: {
       nodeIntegration: true,
@@ -101,13 +108,17 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
 
   browserView.setBounds({ x, y, width, height });
   browserView.webContents.loadURL(url);
+  
+  viewConfigs.push(parsedJson)
 
   // Write
-  storage.set('config', rawViewConfig);
+  storage.set('viewConfigs', viewConfigs);
 });
 
 ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
   const { key, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
+  browserViews;
+  console.log('browserViews: ', browserViews);
   const browserView = browserViews[key];
   browserView.setBounds({ x, y, width, height });
 });

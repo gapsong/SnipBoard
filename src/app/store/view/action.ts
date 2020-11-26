@@ -9,7 +9,7 @@ import { ApplicationState } from '../index';
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
 
 export const fetchRequest: AppThunk = () => {
-    return (dispatch: Dispatch): any => {
+    return (dispatch: Dispatch) => {
         try {
             dispatch({
                 type: DashboardActionTypes.FETCH_REQUEST,
@@ -45,7 +45,7 @@ export const createView = (): actionType => {
         key: 0,
         url: 'https://reddit.com',
         x: 0,
-        y: 0,
+        y: 500,
         width: 2000,
         height: 200,
     };
