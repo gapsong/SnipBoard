@@ -9,7 +9,7 @@ import { ApplicationState } from '../index';
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
 
 export const fetchRequest: AppThunk = () => {
-    return (dispatch: Dispatch): any => {
+    return (dispatch: Dispatch) => {
         try {
             dispatch({
                 type: DashboardActionTypes.FETCH_REQUEST,

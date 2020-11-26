@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
-import { ViewConfig } from '../../store/view/types';
+import { ViewConfig } from '@types';
 
 const convertString = (url: string) => {
     if (!/^http?:\/\//i.test(url)) {
