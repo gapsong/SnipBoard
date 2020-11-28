@@ -2,7 +2,7 @@ import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import isDev from 'electron-is-dev';
 import { ViewConfig } from '@types';
-import { PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from './common/channels';
+import { PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from '@src/common/channels';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;

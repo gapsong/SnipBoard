@@ -5,7 +5,7 @@ import { History } from 'history';
 import { ApplicationState, createRootReducer } from '.';
 import { createIpcMiddleware } from './middleware/ipcmiddleware';
 import { initDashboard, createView, firePongAction } from './view/action';
-import { PONG, CREATE_VIEW, INIT_DASHBOARD } from '../../common/channels';
+import { PONG, CREATE_VIEW, INIT_DASHBOARD } from '@src/common/channels';
 
 // register an action creator to an ipc channel (key/channel, value/action creator)
 const ipc = createIpcMiddleware({

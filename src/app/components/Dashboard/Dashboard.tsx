@@ -5,7 +5,7 @@ import { ViewConfig } from '@types';
 import { ApplicationState } from '../../store';
 import { DraggableView } from './DraggableView';
 import { send } from  '../../../common/ipc';
-import { PONG } from '../../../common/channels';
+import { PONG } from '@src/common/channels';
 
 const Dashboard: React.FunctionComponent = () => {
     const dispatch = useDispatch();
