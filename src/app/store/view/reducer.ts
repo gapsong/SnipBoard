@@ -10,6 +10,25 @@ const reducer: Reducer<DashboardState> = (state = initialState, action: actionTy
         case DashboardActionTypes.INIT_DASHBOARD: {
             return { ...state, views: [action.payload] };
         }
+        case DashboardActionTypes.CREATE_VIEW: {
+            return { ...state, views: state.views.concat(action.payload) };
+        }
+        case DashboardActionTypes.UPDATE_VIEW: {
+            const elemIndex = state.views.findIndex((element) => action.payload.key == element.id);
+            return {
+                ...state,
+                views: state.views.map((item, index) => {
+                    if (index !== elemIndex) {
+                        return item;
+                    }
+                    // Otherwise, this is the one we want - return an updated value
+                    return {
+                        ...item,
+                        ...action.payload,
+                    };
+                }),
+            };
+        }
         default: {
             return state;
         }

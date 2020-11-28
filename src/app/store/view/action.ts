@@ -2,8 +2,10 @@ import { ActionCreator, Action, AnyAction, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
 
-import { DashboardActionTypes, actionType } from './types';
+import { v1 as uuidv1 } from 'uuid';
 import { ViewConfig } from '@types';
+
+import { DashboardActionTypes, actionType } from './types';
 import { ApplicationState } from '../index';
 
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
@@ -42,16 +44,13 @@ export const initDashboard = (data: string): actionType => {
 
 export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
-        key: 0,
+        id: uuidv1(),
         url: 'https://reddit.com',
         x: 0,
         y: 500,
         width: 2000,
         height: 200,
     };
-    // eslint-disable-next-line no-underscore-dangle
-    // @ts-ignore
-    window.api.request('createView', JSON.stringify(viewConfig));
 
     return {
         type: DashboardActionTypes.CREATE_VIEW,
@@ -59,10 +58,16 @@ export const createView = (): AnyAction => {
     };
 };
 
-export const firePongAction = (): AnyAction => {
-
+export const updateViewPosition = (viewConfig: ViewConfig): AnyAction => {
     return {
-        type:'Pong',
+        type: DashboardActionTypes.UPDATE_VIEW,
+        payload: viewConfig,
+    };
+};
+
+export const firePongAction = (): AnyAction => {
+    return {
+        type: 'Pong',
         payload: 'action',
     };
 };

@@ -6,6 +6,7 @@ export enum DashboardActionTypes {
   FETCH_ERROR = '@@dashboard/FETCH_ERROR',
   INIT_DASHBOARD = '@@dashboard/INIT',
   CREATE_VIEW = '@@dashboard/CREATE_VIEW',
+  UPDATE_VIEW = '@@dashboard/UPDATE_VIEW',
 }
 
 export interface DashboardState {

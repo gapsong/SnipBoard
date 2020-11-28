@@ -6,7 +6,7 @@ interface Rectangle {
   }
   
   interface Meta {
-    key: number;
+    id: string;
     url: string;
   }
   

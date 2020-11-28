@@ -1,4 +1,5 @@
 import { Middleware, ActionCreatorsMapObject } from 'redux';
+import { REDUX_ACTION } from '@src/common/channels';
 
 export function createIpcMiddleware(actionMap: ActionCreatorsMapObject): Middleware {
     if (typeof actionMap !== 'object') {
@@ -27,10 +28,9 @@ export function createIpcMiddleware(actionMap: ActionCreatorsMapObject): Middlew
 
         return function (next) {
             return function (action) {
-                if (action.type.startsWith('@@IPC')) {
+                if (action.type != '@@dashboard/init')
                     // @ts-ignore
-                    window.api.request(action.channel, action.payload);
-                }
+                    window.api.request(REDUX_ACTION, action);
                 return next(action);
             };
         };

@@ -2,11 +2,13 @@ import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import isDev from 'electron-is-dev';
 import { ViewConfig } from '@types';
-import { PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from '@src/common/channels';
-
+import { REDUX_ACTION, PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from '@src/common/channels';
+import { DashboardActionTypes } from '@src/app/store/view/types';
+import { AnyAction } from 'redux';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import { act } from 'react-dom/test-utils';
 
 interface ElectronStore {
     viewConfigs: ViewConfig[];
@@ -14,7 +16,7 @@ interface ElectronStore {
 const storage = new Store<ElectronStore>();
 
 let mainWindow: BrowserWindow;
-const browserViews: BrowserView[] = [];
+const browserViews: Map<string, BrowserView> = new Map<string, BrowserView>();
 
 const viewConfigs = storage.get('viewConfigs') || [];
 
@@ -62,9 +64,6 @@ const createView = () => {
     const startUrl = MAIN_WINDOW_WEBPACK_ENTRY;
 
     mainWindow.loadURL(startUrl);
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send(INIT_DASHBOARD, viewConfigs);
-    });
 
     if (isDev) {
         mainWindow.webContents.openDevTools();
@@ -84,43 +83,32 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on(CREATE_VIEW, (event, rawViewConfig: string) => {
-    const parsedJson = JSON.parse(rawViewConfig);
-    const { url, x, y, width, height }: ViewConfig = parsedJson;
-    const browserView = new BrowserView({
-        webPreferences: {
-            nodeIntegration: true,
-            webviewTag: true,
-            zoomFactor: 1.0,
-            enableRemoteModule: true,
-        },
-    });
-    mainWindow.addBrowserView(browserView);
+ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
+    switch (action.type) {
+        case DashboardActionTypes.CREATE_VIEW:
+            {
+                const { id, url, x, y, width, height }: ViewConfig = action.payload;
+                const browserView = new BrowserView({
+                    webPreferences: {
+                        nodeIntegration: true,
+                        webviewTag: true,
+                        zoomFactor: 1.0,
+                        enableRemoteModule: true,
+                    },
+                });
+                mainWindow.addBrowserView(browserView);
+                browserViews.set(id, browserView);
+                browserView.setBounds({ x, y, width, height });
+                browserView.webContents.loadURL(url);
+            }
+            break;
 
-    browserViews.push(browserView);
-
-    browserView.setBounds({ x, y, width, height });
-    browserView.webContents.loadURL(url);
-
-    viewConfigs.push(parsedJson);
-
-    // Write
-    storage.set('viewConfigs', viewConfigs);
-});
-
-ipcMain.on(UPDATE_VIEW_POSITION, (event, rawViewConfig: string) => {
-    const { key, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
-    const browserView = browserViews[key];
-    browserView.setBounds({ x, y, width, height });
-});
-
-ipcMain.on(UPDATE_URL, (event, rawViewConfig: string) => {
-    const { key, url }: ViewConfig = JSON.parse(rawViewConfig);
-    const browserView = browserViews[key];
-    browserView.webContents.loadURL(url);
-});
-
-ipcMain.on(PONG, (event, rawViewConfig: string) => {
-    console.log('pong in electorn', rawViewConfig);
-    // mainWindow.webContents.send(PONG, JSON.stringify({ key: '123' }), '1234');
+        case DashboardActionTypes.UPDATE_VIEW:
+            {
+                const { id, x, y, width, height }: ViewConfig = action.payload;
+                const browserView = browserViews.get(id);
+                browserView.setBounds({ x, y, width, height });
+            }
+            break;
+    }
 });
