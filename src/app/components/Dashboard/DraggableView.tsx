@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
 import { useDispatch } from 'react-redux';
-import { updateViewPosition } from '@src/app/store/view/action';
+import { updateViewPosition, updateUrl } from '@src/app/store/view/action';
 
 const convertString = (url: string) => {
     if (!/^http?:\/\//i.test(url)) {
@@ -34,9 +34,9 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
             })
         );
     };
-    const updateUrl = () => {
-        // @ts-ignore
-        window.api.request('updateUrl', JSON.stringify(convertString(urlValue)));
+
+    const dispatchUrl = () => {
+        dispatch(updateUrl(id, urlValue));
     };
 
     return (
@@ -85,7 +85,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                 >
                     <h1>{convertString(urlValue)}</h1>
                     <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
-                    <Button variant='contained' color='primary' onClick={updateUrl}>
+                    <Button variant='contained' color='primary' onClick={dispatchUrl}>
                         update URl{urlValue}
                     </Button>{' '}
                 </div>

@@ -7,6 +7,7 @@ export enum DashboardActionTypes {
   INIT_DASHBOARD = '@@dashboard/INIT',
   CREATE_VIEW = '@@dashboard/CREATE_VIEW',
   UPDATE_VIEW = '@@dashboard/UPDATE_VIEW',
+  UPDATE_URL = '@@dashboard/UPDATE_URL',
 }
 
 export interface DashboardState {

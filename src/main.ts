@@ -1,24 +1,15 @@
 import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
-import Store from 'electron-store';
 import isDev from 'electron-is-dev';
 import { ViewConfig } from '@types';
-import { REDUX_ACTION, PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from '@src/common/channels';
+import { REDUX_ACTION, INIT_DASHBOARD } from '@src/common/channels';
 import { DashboardActionTypes } from '@src/app/store/view/types';
 import { AnyAction } from 'redux';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
-import { act } from 'react-dom/test-utils';
-
-interface ElectronStore {
-    viewConfigs: ViewConfig[];
-}
-const storage = new Store<ElectronStore>();
 
 let mainWindow: BrowserWindow;
 const browserViews: Map<string, BrowserView> = new Map<string, BrowserView>();
-
-const viewConfigs = storage.get('viewConfigs') || [];
 
 const createView = () => {
     const electronScreen = screen;
@@ -64,6 +55,9 @@ const createView = () => {
     const startUrl = MAIN_WINDOW_WEBPACK_ENTRY;
 
     mainWindow.loadURL(startUrl);
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.send(INIT_DASHBOARD, { state: 123 });
+    });
 
     if (isDev) {
         mainWindow.webContents.openDevTools();
@@ -102,7 +96,13 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserView.webContents.loadURL(url);
             }
             break;
-
+        case DashboardActionTypes.UPDATE_URL:
+            {
+                const { id, url } = action.payload;
+                const browserView = browserViews.get(id);
+                browserView.webContents.loadURL(url);
+            }
+            break;
         case DashboardActionTypes.UPDATE_VIEW:
             {
                 const { id, x, y, width, height }: ViewConfig = action.payload;

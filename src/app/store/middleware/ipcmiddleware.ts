@@ -1,5 +1,5 @@
 import { Middleware, ActionCreatorsMapObject } from 'redux';
-import { REDUX_ACTION } from '@src/common/channels';
+import { REDUX_ACTION, INIT_DASHBOARD } from '@src/common/channels';
 
 export function createIpcMiddleware(actionMap: ActionCreatorsMapObject): Middleware {
     if (typeof actionMap !== 'object') {
@@ -28,7 +28,7 @@ export function createIpcMiddleware(actionMap: ActionCreatorsMapObject): Middlew
 
         return function (next) {
             return function (action) {
-                if (action.type != '@@dashboard/init')
+                if (INIT_DASHBOARD !== action.type)
                     // @ts-ignore
                     window.api.request(REDUX_ACTION, action);
                 return next(action);

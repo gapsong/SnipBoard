@@ -47,13 +47,25 @@ export const createView = (): AnyAction => {
         id: uuidv1(),
         url: 'https://reddit.com',
         x: 0,
-        y: 500,
-        width: 2000,
+        y: 0,
+        width: 300,
         height: 200,
     };
 
     return {
         type: DashboardActionTypes.CREATE_VIEW,
+        payload: viewConfig,
+    };
+};
+
+export const updateUrl = (id: string, url: string): AnyAction => {
+    const viewConfig = {
+        id,
+        url,
+    };
+
+    return {
+        type: DashboardActionTypes.UPDATE_URL,
         payload: viewConfig,
     };
 };
