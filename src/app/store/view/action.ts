@@ -1,4 +1,4 @@
-import { ActionCreator, Action, Dispatch } from 'redux';
+import { ActionCreator, Action, AnyAction, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
 
@@ -40,7 +40,7 @@ export const initStore = (data: string): actionType => {
     };
 };
 
-export const createView = (): actionType => {
+export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
         key: 0,
         url: 'https://reddit.com',
@@ -56,5 +56,13 @@ export const createView = (): actionType => {
     return {
         type: DashboardActionTypes.CREATE_VIEW,
         payload: viewConfig,
+    };
+};
+
+export const firePongAction = (): AnyAction => {
+
+    return {
+        type:'Pong',
+        payload: 'action',
     };
 };

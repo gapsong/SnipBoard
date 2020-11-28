@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { initStore, createView } from '../../store/view/action';
@@ -7,31 +7,40 @@ import { ApplicationState } from '../../store';
 import { DraggableView } from './DraggableView';
 
 const Dashboard: React.FunctionComponent = () => {
-  const dispatch = useDispatch();
-  const views = useSelector((state: ApplicationState) => state.dashboard.views);
+    const dispatch = useDispatch();
+    const views = useSelector((state: ApplicationState) => state.dashboard.views);
 
-  useEffect(() => {
-    // @ts-ignore
-    window.api.response('initStore', dispatchInitStore); // cleanup this component
-    return () => {
-      // @ts-ignore
-      window.api.removeListener('initStore', dispatchInitStore);
-    };
-  }, []);
+    useEffect(() => {
+        // @ts-ignore
+        window.api.response('initStore', dispatchInitStore); // cleanup this component
+        return () => {
+            // @ts-ignore
+            window.api.removeListener('initStore', dispatchInitStore);
+        };
+    }, []);
 
-  const dispatchInitStore = (data: any) => dispatch(initStore(data));
-  const dispatchCreateView = () => dispatch(createView());
+    const dispatchInitStore = (data: any) => dispatch(initStore(data));
+    const dispatchCreateView = () => dispatch(createView());
+    const dispatchPong = () =>
+        dispatch({
+            type: '@@IPC',
+            channel:'pong',
+            payload: 'Guck mal die Payload an',
+        });
 
-  return (
-    <div>
-      {views.map((view: ViewConfig) => (
-        <DraggableView key={view.url} {...view} />
-      ))}
-      <Button variant='contained' color='primary' onClick={dispatchCreateView}>
-        Createview
-      </Button>
-    </div>
-  );
+    return (
+        <div>
+            {views.map((view: ViewConfig) => (
+                <DraggableView key={view.url} {...view} />
+            ))}
+            <Button variant='contained' color='primary' onClick={dispatchCreateView}>
+                Createview
+            </Button>{' '}
+            <Button variant='contained' color='primary' onClick={dispatchPong}>
+                send
+            </Button>
+        </div>
+    );
 };
 
 export default Dashboard;
