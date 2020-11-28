@@ -1,6 +1,6 @@
 import { Middleware, ActionCreatorsMapObject } from 'redux';
 
-export function createIpc(actionMap: ActionCreatorsMapObject): Middleware {
+export function createIpcMiddleware(actionMap: ActionCreatorsMapObject): Middleware {
     if (typeof actionMap !== 'object') {
         throw new TypeError(`createIpc expects an events object as its first parameter, you passed type "${typeof actionMap}"`);
     }
