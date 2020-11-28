@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-const validChannels = ['pong', 'updateUrl', 'initStore', 'updateViewPosition', 'createView'];
+import { PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from './common/channels';
+
+const validChannels = [PONG, UPDATE_URL, INIT_DASHBOARD, UPDATE_VIEW_POSITION, CREATE_VIEW];
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object

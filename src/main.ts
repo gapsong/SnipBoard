@@ -2,6 +2,7 @@ import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
 import isDev from 'electron-is-dev';
 import { ViewConfig } from '@types';
+import { PONG, CREATE_VIEW, INIT_DASHBOARD, UPDATE_VIEW_POSITION, UPDATE_URL } from './common/channels';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -62,7 +63,7 @@ const createView = () => {
 
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send('initStore', viewConfigs);
+        mainWindow.webContents.send(INIT_DASHBOARD, viewConfigs);
     });
 
     if (isDev) {
@@ -83,7 +84,7 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on('createView', (event, rawViewConfig: string) => {
+ipcMain.on(CREATE_VIEW, (event, rawViewConfig: string) => {
     const parsedJson = JSON.parse(rawViewConfig);
     const { url, x, y, width, height }: ViewConfig = parsedJson;
     const browserView = new BrowserView({
@@ -107,19 +108,19 @@ ipcMain.on('createView', (event, rawViewConfig: string) => {
     storage.set('viewConfigs', viewConfigs);
 });
 
-ipcMain.on('updateViewPosition', (event, rawViewConfig: string) => {
+ipcMain.on(UPDATE_VIEW_POSITION, (event, rawViewConfig: string) => {
     const { key, x, y, width, height }: ViewConfig = JSON.parse(rawViewConfig);
     const browserView = browserViews[key];
     browserView.setBounds({ x, y, width, height });
 });
 
-ipcMain.on('updateUrl', (event, rawViewConfig: string) => {
+ipcMain.on(UPDATE_URL, (event, rawViewConfig: string) => {
     const { key, url }: ViewConfig = JSON.parse(rawViewConfig);
     const browserView = browserViews[key];
     browserView.webContents.loadURL(url);
 });
 
-ipcMain.on('pong', (event, rawViewConfig: string) => {
+ipcMain.on(PONG, (event, rawViewConfig: string) => {
     console.log('pong in electorn', rawViewConfig);
-    mainWindow.webContents.send('pong', JSON.stringify({ key: '123' }), '1234');
+    // mainWindow.webContents.send(PONG, JSON.stringify({ key: '123' }), '1234');
 });

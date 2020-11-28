@@ -4,11 +4,14 @@ import { routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
 import { ApplicationState, createRootReducer } from '.';
 import { createIpc } from './middleware/ipcmiddleware';
-import { createView, firePongAction } from './view/action';
+import { initDashboard, createView, firePongAction } from './view/action';
+import { PONG, CREATE_VIEW, INIT_DASHBOARD } from '../../common/channels';
 
 // register an action creator to an ipc channel (key/channel, value/action creator)
 const ipc = createIpc({
-    pong: firePongAction, // receive a message
+    [PONG]: firePongAction, // receive a message
+    [CREATE_VIEW]: createView, // receive a message
+    [INIT_DASHBOARD]: initDashboard, // receive a message
 });
 
 export const configureStore = (history: History, initialState: ApplicationState): Store<ApplicationState> => {

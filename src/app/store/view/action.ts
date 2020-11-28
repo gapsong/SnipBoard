@@ -33,7 +33,7 @@ export const fetchRequest: AppThunk = () => {
     };
 };
 
-export const initStore = (data: string): actionType => {
+export const initDashboard = (data: string): actionType => {
     return {
         type: DashboardActionTypes.INIT_DASHBOARD,
         payload: data,

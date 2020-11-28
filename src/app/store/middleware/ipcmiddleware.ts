@@ -1,4 +1,4 @@
-import { Middleware, AnyAction, ActionCreatorsMapObject } from 'redux';
+import { Middleware, ActionCreatorsMapObject } from 'redux';
 
 export function createIpc(actionMap: ActionCreatorsMapObject): Middleware {
     if (typeof actionMap !== 'object') {
@@ -16,6 +16,7 @@ export function createIpc(actionMap: ActionCreatorsMapObject): Middleware {
     });
 
     return ({ dispatch }) => {
+        //create all listeners
         Object.keys(actionMap).forEach((channel) => {
             // receive values from electon ipc
             // @ts-ignore
@@ -33,13 +34,5 @@ export function createIpc(actionMap: ActionCreatorsMapObject): Middleware {
                 return next(action);
             };
         };
-    };
-}
-
-export function send(channel: string, payload: JSON): AnyAction {
-    return {
-        type: '@@IPC',
-        channel: channel,
-        payload: payload,
     };
 }
