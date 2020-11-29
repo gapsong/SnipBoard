@@ -46,9 +46,9 @@ export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
         id: uuidv1(),
         url: 'https://reddit.com',
-        x: 0,
-        y: 0,
-        width: 300,
+        x: 20,
+        y: 50,
+        width: 500,
         height: 200,
     };
 
@@ -86,7 +86,7 @@ export const saveDashboard = (): AnyAction => {
 export const deleteView = (id: string): AnyAction => {
     return {
         type: DashboardActionTypes.DELETE_VIEW,
-        payload: id,
+        payload: { id },
     };
 };
 

@@ -112,7 +112,8 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             break;
         case DashboardActionTypes.DELETE_VIEW:
             {
-                const bv = browserViews.get(action.payload);
+                const { id }: ViewConfig = action.payload;
+                const bv = browserViews.get(id);
                 mainWindow.removeBrowserView(bv);
                 browserViews.delete(action.payload);
             }

@@ -5,18 +5,10 @@ import { ViewConfig } from '@types';
 import { useDispatch } from 'react-redux';
 import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
 
-const convertString = (url: string) => {
-    if (!/^http?:\/\//i.test(url)) {
-        return 'https://' + url;
-    }
-    return url;
-};
-
 const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     const dispatch = useDispatch();
     const id = prop.id;
-
-    const [urlValue, setGreeting] = useState(prop.url);
+    const [urlValue, setUrl] = useState(prop.url);
     const [x, setX] = useState(prop.x);
     const [y, setY] = useState(prop.y);
     const [width, setWidth] = useState(prop.width);
@@ -26,7 +18,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
         dispatch(
             updateViewPosition({
                 id: id,
-                url: convertString(urlValue),
+                url: urlValue,
                 x,
                 y,
                 width,
@@ -38,8 +30,12 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     const dispatchUrl = () => {
         dispatch(updateUrl(id, urlValue));
     };
-        
+
     const dispatchDelete = () => {
+        dispatch(deleteView(id));
+    };
+
+    const dispatchCrop = () => {
         dispatch(deleteView(id));
     };
 
@@ -63,7 +59,8 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setX(d.x);
                     setY(d.y);
                 }}
-                onDragStop={() => {
+                onDragStop={(event) => {
+                    event.stopPropagation();
                     dispatchViewPosition();
                 }}
                 onResize={(e, direction, ref, delta, position) => {
@@ -72,7 +69,8 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setX(position.x);
                     setY(position.y);
                 }}
-                onResizeStop={() => {
+                onResizeStop={(event) => {
+                    event.stopPropagation();
                     dispatchViewPosition();
                 }}
             >
@@ -87,13 +85,15 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                         border: 'solid 2px #ddd',
                     }}
                 >
-                    <h1>{convertString(urlValue)}</h1>
-                    <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
+                    <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setUrl(event.target.value)} />
                     <Button variant='contained' color='primary' onClick={dispatchUrl}>
                         update URl{urlValue}
-                    </Button>{' '}                   
+                    </Button>{' '}
                     <Button variant='contained' color='primary' onClick={dispatchDelete}>
                         Delete View
+                    </Button>{' '}
+                    <Button variant='contained' color='primary' onClick={dispatchCrop}>
+                        Crop View
                     </Button>{' '}
                 </div>
             </Rnd>
