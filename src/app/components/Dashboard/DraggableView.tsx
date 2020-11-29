@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
 import { useDispatch } from 'react-redux';
-import { updateViewPosition, updateUrl } from '@src/app/store/view/action';
+import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
 
 const convertString = (url: string) => {
     if (!/^http?:\/\//i.test(url)) {
@@ -37,6 +37,10 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
 
     const dispatchUrl = () => {
         dispatch(updateUrl(id, urlValue));
+    };
+        
+    const dispatchDelete = () => {
+        dispatch(deleteView(id));
     };
 
     return (
@@ -87,6 +91,9 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
                     <Button variant='contained' color='primary' onClick={dispatchUrl}>
                         update URl{urlValue}
+                    </Button>{' '}                   
+                    <Button variant='contained' color='primary' onClick={dispatchDelete}>
+                        Delete View
                     </Button>{' '}
                 </div>
             </Rnd>

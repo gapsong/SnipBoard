@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import { DashboardActionTypes, DashboardState, actionType } from './types';
 
 export const initialState: DashboardState = {
-    views: [],
+    views: {},
 };
 
 const reducer: Reducer<DashboardState> = (state = initialState, action: actionType) => {
@@ -11,7 +11,11 @@ const reducer: Reducer<DashboardState> = (state = initialState, action: actionTy
             return { ...state, ...action.payload };
         }
         case DashboardActionTypes.CREATE_VIEW: {
-            return { ...state, views: state.views.concat(action.payload) };
+            return { ...state, views: { ...state.views, [action.payload.id]: action.payload } };
+        }
+        case DashboardActionTypes.DELETE_VIEW: {
+            delete state.views[action.payload];
+            return { ...state, views: { ...state.views } };
         }
         default: {
             return state;

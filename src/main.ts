@@ -110,5 +110,12 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserView.setBounds({ x, y, width, height });
             }
             break;
+        case DashboardActionTypes.DELETE_VIEW:
+            {
+                const bv = browserViews.get(action.payload);
+                mainWindow.removeBrowserView(bv);
+                browserViews.delete(action.payload);
+            }
+            break;
     }
 });

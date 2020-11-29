@@ -77,6 +77,19 @@ export const updateViewPosition = (viewConfig: ViewConfig): AnyAction => {
     };
 };
 
+export const saveDashboard = (): AnyAction => {
+    return {
+        type: DashboardActionTypes.SAVE,
+    };
+};
+
+export const deleteView = (id: string): AnyAction => {
+    return {
+        type: DashboardActionTypes.DELETE_VIEW,
+        payload: id,
+    };
+};
+
 export const firePongAction = (): AnyAction => {
     return {
         type: 'Pong',
