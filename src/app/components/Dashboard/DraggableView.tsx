@@ -2,37 +2,41 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
+import { useDispatch } from 'react-redux';
+import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
 
-const convertString = (url: string) => {
-    if (!/^http?:\/\//i.test(url)) {
-        return 'https://' + url;
-    }
-    return url;
-};
-
-const DraggableView: React.FunctionComponent<ViewConfig> = (prop: ViewConfig) => {
-    const [urlValue, setGreeting] = useState(prop.url);
+const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
+    const dispatch = useDispatch();
+    const id = prop.id;
+    const [urlValue, setUrl] = useState(prop.url);
     const [x, setX] = useState(prop.x);
     const [y, setY] = useState(prop.y);
     const [width, setWidth] = useState(prop.width);
     const [height, setHeight] = useState(prop.height);
 
-    const updateViewPosition = () => {
-        const viewConfig: ViewConfig = {
-            key: 0,
-            url: convertString(urlValue),
-            x,
-            y,
-            width,
-            height,
-        };
-        // eslint-disable-next-line no-underscore-dangle
-        // @ts-ignore
-        window.api.request('updateViewPosition', JSON.stringify(viewConfig));
+    const dispatchViewPosition = () => {
+        dispatch(
+            updateViewPosition({
+                id: id,
+                url: urlValue,
+                x,
+                y,
+                width,
+                height,
+            })
+        );
     };
-    const updateUrl = () => {
-        // @ts-ignore
-        window.api.request('updateUrl', JSON.stringify(convertString(urlValue)));
+
+    const dispatchUrl = () => {
+        dispatch(updateUrl(id, urlValue));
+    };
+
+    const dispatchDelete = () => {
+        dispatch(deleteView(id));
+    };
+
+    const dispatchCrop = () => {
+        dispatch(deleteView(id));
     };
 
     return (
@@ -54,17 +58,20 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop: ViewConfig) =>
                 onDrag={(e, d) => {
                     setX(d.x);
                     setY(d.y);
-                    updateViewPosition();
                 }}
-                onDragStop={(e, d) => {
-                    setX(d.x);
-                    setY(d.y);
-                    updateViewPosition();
+                onDragStop={(event) => {
+                    event.stopPropagation();
+                    dispatchViewPosition();
                 }}
-                onResizeStop={(e, direction, ref, delta, position) => {
+                onResize={(e, direction, ref, delta, position) => {
                     setWidth(parseInt(ref.style.width));
                     setHeight(parseInt(ref.style.height));
-                    updateViewPosition();
+                    setX(position.x);
+                    setY(position.y);
+                }}
+                onResizeStop={(event) => {
+                    event.stopPropagation();
+                    dispatchViewPosition();
                 }}
             >
                 BrowserView
@@ -78,10 +85,15 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop: ViewConfig) =>
                         border: 'solid 2px #ddd',
                     }}
                 >
-                    <h1>{convertString(urlValue)}</h1>
-                    <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setGreeting(event.target.value)} />
-                    <Button variant='contained' color='primary' onClick={updateUrl}>
+                    <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setUrl(event.target.value)} />
+                    <Button variant='contained' color='primary' onClick={dispatchUrl}>
                         update URl{urlValue}
+                    </Button>{' '}
+                    <Button variant='contained' color='primary' onClick={dispatchDelete}>
+                        Delete View
+                    </Button>{' '}
+                    <Button variant='contained' color='primary' onClick={dispatchCrop}>
+                        Crop View
                     </Button>{' '}
                 </div>
             </Rnd>

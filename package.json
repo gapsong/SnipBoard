@@ -57,12 +57,12 @@
     "less": "^3.12.2",
     "less-loader": "^7.0.1",
     "node-loader": "^1.0.1",
+    "nodemon": "^2.0.6",
     "react-hot-loader": "^4.12.21",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
-    "webpack": "^4.44.1",
-    "nodemon": "^2.0.6"
+    "webpack": "^4.44.1"
   },
   "dependencies": {
     "@hot-loader/react-dom": "^16.13.0",
@@ -82,6 +82,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/redux": "^3.6.0",
+    "@types/uuid": "^8.3.0",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
