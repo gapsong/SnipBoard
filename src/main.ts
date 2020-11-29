@@ -107,6 +107,10 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             {
                 const { id, x, y, width, height }: ViewConfig = action.payload;
                 const browserView = browserViews.get(id);
+                const bounds = browserView.getBounds();
+                if (bounds.x == x && bounds.y == y) {
+                    break;
+                }
                 browserView.setBounds({ x, y, width, height });
             }
             break;
