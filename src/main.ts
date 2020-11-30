@@ -60,7 +60,7 @@ const createView = () => {
     });
 
     if (isDev) {
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     }
 };
 
@@ -93,6 +93,7 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 mainWindow.addBrowserView(browserView);
                 browserViews.set(id, browserView);
                 browserView.setBounds({ x, y, width, height });
+                // browserView.webContents.loadURL(`file://${__dirname}/static/viewport.html?innerWidth=${500}&innerHeight=${500}&scrollLeft?${0}&scrollTop?${0}&url=${url}`);
                 browserView.webContents.loadURL(url);
             }
             break;
@@ -118,6 +119,8 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             {
                 const { id }: ViewConfig = action.payload;
                 const bv = browserViews.get(id);
+                // @ts-ignore
+                bv.webContents.destroy();
                 mainWindow.removeBrowserView(bv);
                 browserViews.delete(action.payload);
             }
