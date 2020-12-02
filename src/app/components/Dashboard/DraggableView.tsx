@@ -28,7 +28,12 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     };
 
     const dispatchUrl = () => {
-        dispatch(updateUrl(id, urlValue));
+        const prefix = 'https://';
+        let temp;
+        if (urlValue.substr(0, prefix.length) !== prefix) {
+            temp = prefix + urlValue;
+        }
+        dispatch(updateUrl(id, temp));
     };
 
     const dispatchDelete = () => {
@@ -59,20 +64,14 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setX(d.x);
                     setY(d.y);
                 }}
-                onDragStop={(event) => {
-                    event.stopPropagation();
-                    dispatchViewPosition();
-                }}
+                onDragStop={dispatchViewPosition}
                 onResize={(e, direction, ref, delta, position) => {
                     setWidth(parseInt(ref.style.width));
                     setHeight(parseInt(ref.style.height));
                     setX(position.x);
                     setY(position.y);
                 }}
-                onResizeStop={(event) => {
-                    event.stopPropagation();
-                    dispatchViewPosition();
-                }}
+                onResizeStop={dispatchViewPosition}
             >
                 BrowserView
                 <div
@@ -85,16 +84,26 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                         border: 'solid 2px #ddd',
                     }}
                 >
-                    <TextField label='Standard' type='text' value={urlValue} onChange={(event) => setUrl(event.target.value)} />
-                    <Button variant='contained' color='primary' onClick={dispatchUrl}>
-                        update URl{urlValue}
-                    </Button>{' '}
+                    <TextField
+                        label='Standard'
+                        type='text'
+                        value={urlValue}
+                        onKeyPress={(ev) => {
+                            console.log(`Pressed keyCode ${ev.key}`);
+                            if (ev.key === 'Enter') {
+                                // Do code here
+                                ev.preventDefault();
+                                dispatchUrl();
+                            }
+                        }}
+                        onChange={(event) => setUrl(event.target.value)}
+                    />
                     <Button variant='contained' color='primary' onClick={dispatchDelete}>
                         Delete View
-                    </Button>{' '}
+                    </Button>
                     <Button variant='contained' color='primary' onClick={dispatchCrop}>
                         Crop View
-                    </Button>{' '}
+                    </Button>
                 </div>
             </Rnd>
         </div>

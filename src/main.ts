@@ -60,7 +60,7 @@ const createView = () => {
     });
 
     if (isDev) {
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     }
 };
 
@@ -84,16 +84,18 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 const { id, url, x, y, width, height }: ViewConfig = action.payload;
                 const browserView = new BrowserView({
                     webPreferences: {
-                        nodeIntegration: true,
+                        nodeIntegration: false,
+                        worldSafeExecuteJavaScript: true,
+                        contextIsolation: true,
                         webviewTag: true,
-                        zoomFactor: 1.0,
-                        enableRemoteModule: true,
+                        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
                     },
                 });
                 mainWindow.addBrowserView(browserView);
                 browserViews.set(id, browserView);
                 browserView.setBounds({ x, y, width, height });
-                browserView.webContents.loadURL(url);
+                // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
+                browserView.webContents.loadURL('http://localhost:3001');
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
@@ -118,6 +120,8 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             {
                 const { id }: ViewConfig = action.payload;
                 const bv = browserViews.get(id);
+                // @ts-ignore
+                bv.webContents.destroy();
                 mainWindow.removeBrowserView(bv);
                 browserViews.delete(action.payload);
             }
