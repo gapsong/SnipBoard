@@ -45,7 +45,7 @@ export const initDashboard = (data: string): actionType => {
 export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
         id: uuidv1(),
-        url: 'https://soundcloud.com',
+        url: 'localhost:9000',
         x: 20,
         y: 50,
         width: 500,

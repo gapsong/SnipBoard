@@ -84,17 +84,18 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 const { id, url, x, y, width, height }: ViewConfig = action.payload;
                 const browserView = new BrowserView({
                     webPreferences: {
-                        nodeIntegration: true,
+                        nodeIntegration: false,
+                        worldSafeExecuteJavaScript: true,
+                        contextIsolation: true,
                         webviewTag: true,
-                        zoomFactor: 1.0,
-                        enableRemoteModule: true,
+                        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
                     },
                 });
                 mainWindow.addBrowserView(browserView);
                 browserViews.set(id, browserView);
                 browserView.setBounds({ x, y, width, height });
-                // browserView.webContents.loadURL(`file://${__dirname}/static/viewport.html?innerWidth=${500}&innerHeight=${500}&scrollLeft?${0}&scrollTop?${0}&url=${url}`);
-                browserView.webContents.loadURL(url);
+                // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
+                browserView.webContents.loadURL('http://localhost:3001');
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
