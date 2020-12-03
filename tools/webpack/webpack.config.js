@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const tsImportPluginFactory = require('ts-import-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const aliases = require('./webpack.aliases');
-const path = require('path');
 const rootDir = process.cwd();
 
 
