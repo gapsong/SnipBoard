@@ -10,7 +10,7 @@ const rootDir = process.cwd();
 
 module.exports = {
     mode: 'development',
-    context: resolve(rootDir, 'src/bv-app'),
+    context: resolve(rootDir, 'src/app/bv-app'),
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         // bundle the client for webpack-dev-server
@@ -47,7 +47,7 @@ module.exports = {
         noInfo: false,
         quiet: false,
         // minimize the output to terminal.
-        contentBase: resolve(rootDir, 'src/bv-app'),
+        contentBase: resolve(rootDir, 'src/app/bv-app'),
         // match the output path
         publicPath: '/',
         // match the output `publicPath`
@@ -118,7 +118,7 @@ module.exports = {
         // enable HMR globally
         new webpack.NamedModulesPlugin(),
         // prints more readable module names in the browser console on HMR updates
-        new HtmlWebpackPlugin({ template: resolve(rootDir, 'src/bv-app/index.html') }),
+        new HtmlWebpackPlugin({ template: resolve(rootDir, 'src/app/bv-app/index.html') }),
         // inject <script> in html file.
     ],
 };
