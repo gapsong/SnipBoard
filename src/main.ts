@@ -95,7 +95,7 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserViews.set(id, browserView);
                 browserView.setBounds({ x, y, width, height });
                 // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
-                browserView.webContents.loadURL('http://localhost:3001');
+                browserView.webContents.loadURL('http://localhost:8080/');
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
