@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { createHashHistory } from 'history';
 import { configureStore } from '../store/configureStore';
+import './index.css';
 
 const history = createHashHistory();
 

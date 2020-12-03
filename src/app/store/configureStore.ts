@@ -5,11 +5,12 @@ import { History } from 'history';
 import { ApplicationState, createRootReducer } from '.';
 import { createIpcMiddleware } from './middleware/ipcmiddleware';
 import { initDashboard} from './view/action';
-import { INIT_DASHBOARD } from '@src/common/channels';
+import { INIT_DASHBOARD, UPDATE_VIEW_POSITION } from '@src/common/channels';
 
 // register an action creator to an ipc channel (key/channel, value/action creator)
 const ipc = createIpcMiddleware({
     [INIT_DASHBOARD]: initDashboard, // receive a message
+    [UPDATE_VIEW_POSITION]: initDashboard, // receive a message
 });
 
 export const configureStore = (history: History, initialState: ApplicationState): Store<ApplicationState> => {

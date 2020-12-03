@@ -10,6 +10,8 @@ export enum DashboardActionTypes {
     UPDATE_URL = '@@dashboard/UPDATE_URL',
     SAVE = '@@dashboard/SAVE',
     DELETE_VIEW = '@@dashboard/DELETE_VIEW',
+    DRAG_VIEW = '@@dashboard/DRAG_VIEW',
+    GET_ABSOLUTE_POSITION = '@@dashboard/GET_ABSOLUTE_POSITION',
 }
 
 interface viewStructure {

@@ -1,6 +1,6 @@
-import { screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
+import { Screen, screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
-import { ViewConfig } from '@types';
+import { ViewConfig, DragConfig } from '@types';
 import { REDUX_ACTION, INIT_DASHBOARD } from '@src/common/channels';
 import { DashboardActionTypes } from '@src/app/store/view/types';
 import { AnyAction } from 'redux';
@@ -10,9 +10,10 @@ import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electro
 
 let mainWindow: BrowserWindow;
 const browserViews: Map<string, BrowserView> = new Map<string, BrowserView>();
+let electronScreen: Screen;
 
 const createView = () => {
-    const electronScreen = screen;
+    electronScreen = screen;
     const displays = electronScreen.getAllDisplays();
     let externalDisplay = null;
     for (const i in displays) {
@@ -58,10 +59,6 @@ const createView = () => {
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send(INIT_DASHBOARD, { state: 123 });
     });
-
-    if (isDev) {
-        // mainWindow.webContents.openDevTools();
-    }
 };
 
 app.whenReady()
@@ -95,7 +92,10 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserViews.set(id, browserView);
                 browserView.setBounds({ x, y, width, height });
                 // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
-                browserView.webContents.loadURL('http://localhost:8080/');
+                browserView.webContents.loadURL(`http://localhost:8080?bvid=${id}`);
+                if (isDev) {
+                    browserView.webContents.openDevTools();
+                }
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
@@ -124,6 +124,13 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 bv.webContents.destroy();
                 mainWindow.removeBrowserView(bv);
                 browserViews.delete(action.payload);
+            }
+            break;
+        case DashboardActionTypes.DRAG_VIEW:
+            {
+                // @ts-ignore
+                mainWindow.webContents.send(DashboardActionTypes.GET_ABSOLUTE_POSITION, JSON.stringify(action.payload));
+
             }
             break;
     }

@@ -3,12 +3,13 @@ interface Rectangle {
     width: number;
     x: number;
     y: number;
-  }
-  
-  interface Meta {
+}
+
+interface Meta {
     id: string;
     url: string;
-  }
-  
-  export type ViewConfig = Meta & Rectangle;
-  
+}
+
+export type ViewConfig = Meta & Rectangle;
+
+export type DragConfig = { id: string; cursorX: number; cursorY: number };

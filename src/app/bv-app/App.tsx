@@ -7,11 +7,11 @@ import { History } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 
 import theme from '../theme';
-import { ApplicationState } from '../store';
+import { BvApplicationState } from '../store';
 import { BrowserView } from '@src/app/components/BrowserView/BrowserView';
 
 interface MainProps {
-    store: Store<ApplicationState>;
+    store: Store<BvApplicationState>;
     history: History;
 }
 
