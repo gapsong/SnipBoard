@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts .",
-    "start2": "webpack-dev-server"
+    "bvdev": "webpack-dev-server --config './tools/webpack/webpack.config.js'"
   },
   "keywords": [
     "electron boilerplate",
