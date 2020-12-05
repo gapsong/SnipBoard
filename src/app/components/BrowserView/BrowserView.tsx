@@ -11,12 +11,9 @@ const preventGhostImage = (event) => {
 };
 
 const BrowserView: React.FunctionComponent = () => {
-    const dispatch = useDispatch();
     const id = window.location.search.replace('?bvid=', '');
 
-    const dispatchDelete = () => {
-        dispatch(deleteView(id));
-    };
+    const dispatch = useDispatch();
 
     const [urlValue, setUrl] = useState('https://github.com/gapsong/');
     const [isDragging, setIsDragging] = useState(false);
@@ -24,6 +21,9 @@ const BrowserView: React.FunctionComponent = () => {
     const [cursorStartX, setCursorStartX] = useState(0);
     const [cursorStartY, setCursorStartY] = useState(0);
 
+    const dispatchDelete = () => {
+        dispatch(deleteView(id));
+    };
     const saveStartingCursorPosition = (event) => {
         setCursorStartX(event.pageX);
         setCursorStartY(event.pageY);
