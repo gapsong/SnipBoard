@@ -9,6 +9,7 @@ const preventGhostImage = (event) => {
     img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
     event.dataTransfer.setDragImage(img, 0, 0);
 };
+
 const BrowserView: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const id = window.location.search.replace('?bvid=', '');
@@ -23,6 +24,11 @@ const BrowserView: React.FunctionComponent = () => {
     const [cursorStartX, setCursorStartX] = useState(0);
     const [cursorStartY, setCursorStartY] = useState(0);
 
+    const saveStartingCursorPosition = (event) => {
+        setCursorStartX(event.pageX);
+        setCursorStartY(event.pageY);
+    };
+
     const fetchUrl = () => {
         const prefix = 'https://';
         let temp;
@@ -32,17 +38,6 @@ const BrowserView: React.FunctionComponent = () => {
         setShownUrl(temp);
     };
 
-    const dragTask = (event) => {
-        if (event.pageX !== 0 && event.pageY !== 0) {
-            dispatch(
-                dragView({
-                    id: id,
-                    deltaX: event.pageX - dragX,
-                    deltaY: event.pageY - dragY,
-                })
-            );
-        }
-    };
     return (
         <div className='appWrapper'>
             <div
@@ -51,15 +46,11 @@ const BrowserView: React.FunctionComponent = () => {
                 onDragStart={(event) => {
                     setIsDragging(true);
                     preventGhostImage(event);
+                    saveStartingCursorPosition(event);
                     dispatch(onDragStart(id));
-                    setCursorStartX(event.pageX);
-                    setCursorStartY(event.pageY);
                 }}
                 onDrag={(event) => {
                     console.log('ondrag');
-                    console.log(event.pageX);
-                    console.log(event.pageY);
-                    console.log(isDragging);
                 }}
                 onDragEnd={(event) => {
                     setIsDragging(false);
