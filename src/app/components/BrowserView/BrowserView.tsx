@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
-import { deleteView, dragView } from '@src/app/store/view/action';
+import { deleteView, dragView, onDragStart, onDragEnd } from '@src/app/store/view/action';
 
+const preventGhostImage = (event) => {
+    //prevent ghostimage
+    const img = new Image();
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    event.dataTransfer.setDragImage(img, 0, 0);
+};
 const BrowserView: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const id = window.location.search.replace('?bvid=', '');
@@ -11,8 +17,11 @@ const BrowserView: React.FunctionComponent = () => {
         dispatch(deleteView(id));
     };
 
-    const [urlValue, setUrl] = useState('https://github.com/gapsong/SnipBoard/projects/1');
+    const [urlValue, setUrl] = useState('https://github.com/gapsong/');
+    const [isDragging, setIsDragging] = useState(false);
     const [shownUrl, setShownUrl] = useState(urlValue);
+    const [cursorStartX, setCursorStartX] = useState(0);
+    const [cursorStartY, setCursorStartY] = useState(0);
 
     const fetchUrl = () => {
         const prefix = 'https://';
@@ -24,23 +33,43 @@ const BrowserView: React.FunctionComponent = () => {
     };
 
     const dragTask = (event) => {
-        dispatch(
-            dragView({
-                id: id,
-                cursorX: event.screenX,
-                cursorY: event.screenY,
-            })
-        );
-        console.log('logic goes herex', event.screenX);
-        console.log('logic goes herey', event.screenY);
+        if (event.pageX !== 0 && event.pageY !== 0) {
+            dispatch(
+                dragView({
+                    id: id,
+                    deltaX: event.pageX - dragX,
+                    deltaY: event.pageY - dragY,
+                })
+            );
+        }
     };
     return (
         <div className='appWrapper'>
             <div
-                draggable
-                key={123}
+                id='23'
+                draggable='true'
+                onDragStart={(event) => {
+                    setIsDragging(true);
+                    preventGhostImage(event);
+                    dispatch(onDragStart(id));
+                    setCursorStartX(event.pageX);
+                    setCursorStartY(event.pageY);
+                }}
                 onDrag={(event) => {
-                    dragTask(event);
+                    console.log('ondrag');
+                    console.log(event.pageX);
+                    console.log(event.pageY);
+                    console.log(isDragging);
+                }}
+                onDragEnd={(event) => {
+                    setIsDragging(false);
+                    dispatch(
+                        onDragEnd({
+                            id: id,
+                            deltaX: event.pageX - cursorStartX,
+                            deltaY: event.pageY - cursorStartY,
+                        })
+                    );
                 }}
             >
                 <TextField
@@ -61,10 +90,12 @@ const BrowserView: React.FunctionComponent = () => {
                     Delete BrowserView
                 </Button>
             </div>
-            <div
-                className='appWrapper'
-                dangerouslySetInnerHTML={{ __html: `<webview class=appWrapper id=wv1 src=${shownUrl}></webview>` }}
-            />
+            {!isDragging && (
+                <div
+                    className='appWrapper'
+                    dangerouslySetInnerHTML={{ __html: `<webview class=appWrapper id=wv1 src=${shownUrl}></webview>` }}
+                />
+            )}
         </div>
     );
 };

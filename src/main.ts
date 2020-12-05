@@ -1,4 +1,4 @@
-import { Screen, screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
+import { Screen, screen, BrowserView, app, BrowserWindow, ipcMain, webContents } from 'electron';
 import isDev from 'electron-is-dev';
 import { ViewConfig, DragConfig } from '@types';
 import { REDUX_ACTION, INIT_DASHBOARD } from '@src/common/channels';
@@ -7,6 +7,7 @@ import { AnyAction } from 'redux';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import { act } from '@testing-library/react';
 
 let mainWindow: BrowserWindow;
 const browserViews: Map<string, BrowserView> = new Map<string, BrowserView>();
@@ -74,6 +75,8 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
+let oldBounds;
+
 ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
     switch (action.type) {
         case DashboardActionTypes.CREATE_VIEW:
@@ -126,11 +129,32 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserViews.delete(action.payload);
             }
             break;
-        case DashboardActionTypes.DRAG_VIEW:
+        case DashboardActionTypes.ON_DRAG_START:
             {
+                const { id } = action.payload;
+                const browserView = browserViews.get(id);
+                oldBounds = browserView.getBounds();
+                const mainWindowBounds = mainWindow.getBounds();
+                browserView.setBounds({ x: 0, y: 0, width: mainWindowBounds.width, height: mainWindowBounds.height });
+            }
+            break;
+        case DashboardActionTypes.ON_DRAG:
+            {
+                // const { id, deltaX, deltaY }: DragConfig = action.payload;
+                // const browserView = browserViews.get(id);
+                // //needed to put the dragging bv on top
+                // mainWindow.removeBrowserView(browserView);
+                // mainWindow.addBrowserView(browserView);
+                // const bounds = browserView.getBounds();
+                // browserView.setBounds({ x: bounds.x + deltaX, y: bounds.y + deltaY, width: bounds.width, height: bounds.height });
+            }
+            break;
+        case DashboardActionTypes.ON_DRAG_END:
+            {
+                const { id, deltaX, deltaY }: DragConfig = action.payload;
+                const browserView = browserViews.get(id);
                 // @ts-ignore
-                mainWindow.webContents.send(DashboardActionTypes.GET_ABSOLUTE_POSITION, JSON.stringify(action.payload));
-
+                browserView.setBounds(Object.assign(oldBounds, { x: deltaX, y: deltaY }));
             }
             break;
     }
