@@ -134,6 +134,8 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 const { id } = action.payload;
                 const browserView = browserViews.get(id);
                 oldBounds = browserView.getBounds();
+                mainWindow.removeBrowserView(browserView);
+                mainWindow.addBrowserView(browserView);
                 const mainWindowBounds = mainWindow.getBounds();
                 browserView.setBounds({ x: 0, y: 0, width: mainWindowBounds.width, height: mainWindowBounds.height });
             }
@@ -143,8 +145,7 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 // const { id, deltaX, deltaY }: DragConfig = action.payload;
                 // const browserView = browserViews.get(id);
                 // //needed to put the dragging bv on top
-                // mainWindow.removeBrowserView(browserView);
-                // mainWindow.addBrowserView(browserView);
+  
                 // const bounds = browserView.getBounds();
                 // browserView.setBounds({ x: bounds.x + deltaX, y: bounds.y + deltaY, width: bounds.width, height: bounds.height });
             }
