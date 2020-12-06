@@ -3,7 +3,7 @@ import { ThunkAction } from 'redux-thunk';
 import axios from 'axios';
 
 import { v1 as uuidv1 } from 'uuid';
-import { ViewConfig } from '@types';
+import { ViewConfig, DragConfig } from '@types';
 
 import { DashboardActionTypes, actionType } from './types';
 import { ApplicationState } from '../index';
@@ -87,6 +87,34 @@ export const deleteView = (id: string): AnyAction => {
     return {
         type: DashboardActionTypes.DELETE_VIEW,
         payload: { id },
+    };
+};
+
+export const dragView = (dragConfig: DragConfig): AnyAction => {
+    return {
+        type: DashboardActionTypes.ON_DRAG,
+        payload: dragConfig,
+    };
+};
+
+export const onDragStart = (id: string): AnyAction => {
+    return {
+        type: DashboardActionTypes.ON_DRAG_START,
+        payload: { id },
+    };
+};
+
+export const onDragEnd = (dragConfig: DragConfig): AnyAction => {
+    return {
+        type: DashboardActionTypes.ON_DRAG_END,
+        payload: dragConfig,
+    };
+};
+
+export const dragViewDashboard = (dragConfig: DragConfig): AnyAction => {
+    return {
+        type: DashboardActionTypes.GET_ABSOLUTE_POSITION,
+        payload: dragConfig,
     };
 };
 

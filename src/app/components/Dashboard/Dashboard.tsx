@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { ViewConfig } from '@types';
 import { ApplicationState } from '../../store';
 import { createView, saveDashboard } from '@src/app/store/view/action';
 import { DraggableView } from './DraggableView';
