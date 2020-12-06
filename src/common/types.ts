@@ -12,4 +12,4 @@ interface Meta {
 
 export type ViewConfig = Meta & Rectangle;
 
-export type DragConfig = { id: string; deltaX: number; deltaY: number };
+export type DragConfig = { id: string; x: number; y: number };

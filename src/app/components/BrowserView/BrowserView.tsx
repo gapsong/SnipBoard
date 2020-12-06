@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
 import { deleteView, dragView, onDragStart, onDragEnd } from '@src/app/store/view/action';
+import { Rnd } from 'react-rnd';
 
 const preventGhostImage = (event) => {
     //prevent ghostimage
@@ -16,17 +17,12 @@ const BrowserView: React.FunctionComponent = () => {
     const dispatch = useDispatch();
 
     const [urlValue, setUrl] = useState('https://github.com/gapsong/');
-    const [isDragging, setIsDragging] = useState(false);
     const [shownUrl, setShownUrl] = useState(urlValue);
-    const [cursorStartX, setCursorStartX] = useState(0);
-    const [cursorStartY, setCursorStartY] = useState(0);
+    const [x, setX] = useState(0);
+    const [y, setY] = useState(0);
 
     const dispatchDelete = () => {
         dispatch(deleteView(id));
-    };
-    const saveStartingCursorPosition = (event) => {
-        setCursorStartX(event.pageX);
-        setCursorStartY(event.pageY);
     };
 
     const fetchUrl = () => {
@@ -39,30 +35,30 @@ const BrowserView: React.FunctionComponent = () => {
     };
 
     return (
-        <div className='appWrapper'>
-            <div
-                id='23'
-                draggable='true'
-                onDragStart={(event) => {
-                    setIsDragging(true);
-                    preventGhostImage(event);
-                    saveStartingCursorPosition(event);
-                    dispatch(onDragStart(id));
-                }}
-                onDrag={(event) => {
-                    console.log('ondrag');
-                }}
-                onDragEnd={(event) => {
-                    setIsDragging(false);
-                    dispatch(
-                        onDragEnd({
-                            id: id,
-                            deltaX: event.pageX - cursorStartX,
-                            deltaY: event.pageY - cursorStartY,
-                        })
-                    );
-                }}
-            >
+        // Wrapper
+        <Rnd
+            id='Wrapper'
+            className='appWrapper'
+            position={{ x, y }}
+            onDragStart={(event, data) => {
+                setX(data.x);
+                setY(data.y);
+                dispatch(onDragStart(id));
+            }}
+            onDragStop={(event, data) => {
+                dispatch(
+                    onDragEnd({
+                        id: id,
+                        x: data.x,
+                        y: data.y,
+                    })
+                );
+                setX(0);
+                setY(0);
+            }}
+        >
+            {/* Toolbar */}
+            <div>
                 <TextField
                     label='Standard'
                     type='text'
@@ -81,13 +77,8 @@ const BrowserView: React.FunctionComponent = () => {
                     Delete BrowserView
                 </Button>
             </div>
-            {!isDragging && (
-                <div
-                    className='appWrapper'
-                    dangerouslySetInnerHTML={{ __html: `<webview class=appWrapper id=wv1 src=${shownUrl}></webview>` }}
-                />
-            )}
-        </div>
+            <webview className='appWrapper' id='wv1' src={shownUrl}></webview>
+        </Rnd>
     );
 };
 

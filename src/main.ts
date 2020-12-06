@@ -145,17 +145,16 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 // const { id, deltaX, deltaY }: DragConfig = action.payload;
                 // const browserView = browserViews.get(id);
                 // //needed to put the dragging bv on top
-  
                 // const bounds = browserView.getBounds();
                 // browserView.setBounds({ x: bounds.x + deltaX, y: bounds.y + deltaY, width: bounds.width, height: bounds.height });
             }
             break;
         case DashboardActionTypes.ON_DRAG_END:
             {
-                const { id, deltaX, deltaY }: DragConfig = action.payload;
+                const { id, x, y }: DragConfig = action.payload;
                 const browserView = browserViews.get(id);
                 // @ts-ignore
-                browserView.setBounds(Object.assign(oldBounds, { x: deltaX, y: deltaY }));
+                browserView.setBounds(Object.assign(oldBounds, { x: x, y: y }));
             }
             break;
     }
