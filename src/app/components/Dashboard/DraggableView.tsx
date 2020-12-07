@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
 
 const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
@@ -70,7 +70,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setHeight(parseInt(ref.style.height));
                     setX(position.x);
                     setY(position.y);
-                    dispatchViewPosition()
+                    dispatchViewPosition();
                 }}
                 onResizeStop={dispatchViewPosition}
             >

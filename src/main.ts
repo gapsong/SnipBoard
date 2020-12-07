@@ -1,4 +1,4 @@
-import { Screen, screen, BrowserView, app, BrowserWindow, ipcMain, webContents } from 'electron';
+import { Screen, screen, BrowserView, app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import { ViewConfig, DragConfig } from '@types';
 import { REDUX_ACTION, INIT_DASHBOARD } from '@src/common/channels';
@@ -7,7 +7,6 @@ import { AnyAction } from 'redux';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
-import { act } from '@testing-library/react';
 
 let mainWindow: BrowserWindow;
 const browserViews: Map<string, BrowserView> = new Map<string, BrowserView>();
@@ -96,6 +95,9 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserView.setBounds({ x, y, width, height });
                 // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
                 browserView.webContents.loadURL(`http://localhost:8080?bvid=${id}`);
+                if (isDev) {
+                    browserView.webContents.openDevTools();
+                }
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
@@ -135,11 +137,10 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             break;
         case DashboardActionTypes.ON_DRAG:
             {
-                // const { id, deltaX, deltaY }: DragConfig = action.payload;
-                // const browserView = browserViews.get(id);
-                // //needed to put the dragging bv on top
-                // const bounds = browserView.getBounds();
-                // browserView.setBounds({ x: bounds.x + deltaX, y: bounds.y + deltaY, width: bounds.width, height: bounds.height });
+                const { id }: ViewConfig = action.payload;
+                const browserView = browserViews.get(id);
+                browserView.webContents.send(REDUX_ACTION, action.payload);
+                console.log(action.payload);
             }
             break;
         case DashboardActionTypes.ON_DRAG_END:

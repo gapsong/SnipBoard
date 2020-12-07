@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
-import { deleteView, onDragStart, onDragEnd } from '@src/app/store/view/action';
+import { deleteView, onDragStart, onDragEnd, dragView } from '@src/app/store/view/action';
 import Draggable from 'react-draggable';
 
 const initStyle = { x: 0, y: 0, width: '100%', height: '100%', background: 'red' };
@@ -12,6 +12,8 @@ const BrowserView: React.FunctionComponent = () => {
     const [shownUrl, setShownUrl] = useState(urlValue);
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
     const [bvStyle, setBvStyle] = useState(initStyle);
 
     const dispatchDelete = () => {
@@ -36,6 +38,20 @@ const BrowserView: React.FunctionComponent = () => {
                 setY(data.y);
                 dispatch(onDragStart(id));
                 setBvStyle({ x: 0, y: 0, width: `${data.node.clientWidth}px`, height: `${data.node.clientHeight}px`, background: 'green' });
+                setWidth(data.node.clientWidth);
+                setHeight(data.node.clientHeight);
+            }}
+            onDrag={(event, data) => {
+                dispatch(
+                    dragView({
+                        id: id,
+                        url: '123',
+                        x: data.x,
+                        y: data.y,
+                        width,
+                        height,
+                    })
+                );
             }}
             onStop={(event, data) => {
                 dispatch(

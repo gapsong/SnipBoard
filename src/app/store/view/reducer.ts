@@ -17,6 +17,9 @@ const reducer: Reducer<DashboardState> = (state = initialState, action: actionTy
             delete state.views[action.payload.id];
             return { ...state, views: { ...state.views } };
         }
+        case DashboardActionTypes.ON_DRAG: {
+            return { ...state, views: { ...state.views, ...{ [action.payload.id]: action.payload } } };
+        }
         default: {
             return state;
         }
