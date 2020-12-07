@@ -96,9 +96,6 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 browserView.setBounds({ x, y, width, height });
                 // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
                 browserView.webContents.loadURL(`http://localhost:8080?bvid=${id}`);
-                if (isDev) {
-                    browserView.webContents.openDevTools();
-                }
             }
             break;
         case DashboardActionTypes.UPDATE_URL:
@@ -112,10 +109,6 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             {
                 const { id, x, y, width, height }: ViewConfig = action.payload;
                 const browserView = browserViews.get(id);
-                const bounds = browserView.getBounds();
-                if (bounds.x == x && bounds.y == y) {
-                    break;
-                }
                 browserView.setBounds({ x, y, width, height });
             }
             break;

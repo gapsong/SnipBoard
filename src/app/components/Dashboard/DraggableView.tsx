@@ -70,6 +70,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setHeight(parseInt(ref.style.height));
                     setX(position.x);
                     setY(position.y);
+                    dispatchViewPosition()
                 }}
                 onResizeStop={dispatchViewPosition}
             >
