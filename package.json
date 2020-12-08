@@ -10,8 +10,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts .",
-    "devbv": "webpack-dev-server --config './tools/webpack/webpack.config.js'"
+    "lint": "eslint --ext .ts ."
   },
   "keywords": [
     "electron boilerplate",
