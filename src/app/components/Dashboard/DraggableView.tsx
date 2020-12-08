@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
 
 const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     const dispatch = useDispatch();
     const id = prop.id;
     const [urlValue, setUrl] = useState(prop.url);
+    const [shownUrl, setShownUrl] = useState('https://soundcloud.com');
     const [x, setX] = useState(prop.x);
     const [y, setY] = useState(prop.y);
     const [width, setWidth] = useState(prop.width);
@@ -25,15 +26,6 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                 height,
             })
         );
-    };
-
-    const dispatchUrl = () => {
-        const prefix = 'https://';
-        let temp;
-        if (urlValue.substr(0, prefix.length) !== prefix) {
-            temp = prefix + urlValue;
-        }
-        dispatch(updateUrl(id, temp));
     };
 
     const dispatchDelete = () => {
@@ -57,6 +49,8 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
             <Rnd
                 style={{
                     border: 'solid 2px #ddd',
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}
                 size={{ width, height }}
                 position={{ x, y }}
@@ -70,20 +64,11 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     setHeight(parseInt(ref.style.height));
                     setX(position.x);
                     setY(position.y);
+                    dispatchViewPosition();
                 }}
                 onResizeStop={dispatchViewPosition}
             >
-                BrowserView
-                <div
-                    style={{
-                        position: 'fixed',
-                        bottom: '-150px',
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: 'solid 2px #ddd',
-                    }}
-                >
+                <div>
                     <TextField
                         label='Standard'
                         type='text'
@@ -93,7 +78,12 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                             if (ev.key === 'Enter') {
                                 // Do code here
                                 ev.preventDefault();
-                                dispatchUrl();
+                                const prefix = 'https://';
+                                let temp;
+                                if (urlValue.substr(0, prefix.length) !== prefix) {
+                                    temp = prefix + urlValue;
+                                }
+                                setShownUrl(temp);
                             }
                         }}
                         onChange={(event) => setUrl(event.target.value)}
@@ -105,6 +95,9 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                         Crop View
                     </Button>
                 </div>
+
+                <webview style={{ width: '100%', height: '100%' }} src={shownUrl} />
+                <div>Footnote</div>
             </Rnd>
         </div>
     );

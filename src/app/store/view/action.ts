@@ -90,7 +90,7 @@ export const deleteView = (id: string): AnyAction => {
     };
 };
 
-export const dragView = (dragConfig: DragConfig): AnyAction => {
+export const dragView = (dragConfig: ViewConfig): AnyAction => {
     return {
         type: DashboardActionTypes.ON_DRAG,
         payload: dragConfig,
