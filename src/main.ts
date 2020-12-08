@@ -58,6 +58,9 @@ const createView = () => {
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send(INIT_DASHBOARD, { state: 123 });
+        if (isDev) {
+            mainWindow.webContents.openDevTools();
+        }
     });
 };
 
@@ -96,7 +99,7 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
                 // browserView.webContents.loadURL(`file://${__dirname}/static/main_window/index.html`);
                 browserView.webContents.loadURL(`http://localhost:8080?bvid=${id}`);
                 if (isDev) {
-                    browserView.webContents.openDevTools();
+                    // browserView.webContents.openDevTools();
                 }
             }
             break;
@@ -137,10 +140,8 @@ ipcMain.on(REDUX_ACTION, (event, action: AnyAction) => {
             break;
         case DashboardActionTypes.ON_DRAG:
             {
-                const { id }: ViewConfig = action.payload;
-                const browserView = browserViews.get(id);
-                browserView.webContents.send(REDUX_ACTION, action.payload);
-                console.log(action.payload);
+                console.log(action)
+                mainWindow.webContents.send(REDUX_ACTION, action);
             }
             break;
         case DashboardActionTypes.ON_DRAG_END:
