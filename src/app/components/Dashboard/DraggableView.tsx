@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { WebviewTag } from 'electron';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
@@ -23,26 +23,28 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
+const DraggableView: React.FunctionComponent<ViewConfig> = ({ id, url, rect }) => {
     const classes = useStyles();
+    const inputEl = useRef(null);
     const dispatch = useDispatch();
-    const id = prop.id;
-    const [urlValue, setUrl] = useState(prop.url);
+    const [urlValue, setUrl] = useState(url);
     const [shownUrl, setShownUrl] = useState('https://soundcloud.com');
-    const [x, setX] = useState(prop.x);
-    const [y, setY] = useState(prop.y);
-    const [width, setWidth] = useState(prop.width);
-    const [height, setHeight] = useState(prop.height);
+    const [x, setX] = useState(rect.x);
+    const [y, setY] = useState(rect.y);
+    const [width, setWidth] = useState(rect.width);
+    const [height, setHeight] = useState(rect.height);
 
     const dispatchViewPosition = () => {
         dispatch(
             updateViewPosition({
                 id: id,
                 url: urlValue,
-                x,
-                y,
-                width,
-                height,
+                rect: {
+                    x,
+                    y,
+                    width,
+                    height,
+                },
             })
         );
     };
@@ -91,8 +93,11 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                                     variant='contained'
                                     color='primary'
                                     onClick={() => {
-                                        const wv = document.getElementById('webview1');
-                                        (wv as WebviewTag).goBack();
+                                        inputEl
+                                        const wv = document.getElementById(id) as WebviewTag;
+                                        if (wv.canGoBack()) {
+                                            wv.goBack();
+                                        }
                                     }}
                                 >
                                     Back
@@ -101,8 +106,8 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                                     variant='contained'
                                     color='primary'
                                     onClick={() => {
-                                        const wv = document.getElementById('webview1');
-                                        (wv as WebviewTag).goForward();
+                                        const wv = document.getElementById(id) as WebviewTag;
+                                        wv.goForward();
                                     }}
                                 >
                                     Forward
@@ -141,7 +146,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                         </Grid>
                     </Grid>
                 </div>
-                <webview id='webview1' style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
+                <webview id={id} style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
                 <div>Footnote</div>
             </Rnd>
         </div>

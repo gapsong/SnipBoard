@@ -10,6 +10,6 @@ interface Meta {
     url: string;
 }
 
-export type ViewConfig = Meta & Rectangle;
+export type ViewConfig = Meta & { rect: Rectangle };
 
 export type DragConfig = { id: string; x: number; y: number };

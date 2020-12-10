@@ -46,10 +46,12 @@ export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
         id: uuidv1(),
         url: 'localhost:9000',
-        x: 20,
-        y: 50,
-        width: 1000,
-        height: 300,
+        rect: {
+            x: 20,
+            y: 50,
+            width: 1000,
+            height: 300,
+        },
     };
 
     return {

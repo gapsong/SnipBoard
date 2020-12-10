@@ -21,6 +21,7 @@ interface viewStructure {
 }
 export interface DashboardState {
     readonly views: viewStructure;
+    viewOrder: string[];
 }
 
 export interface actionType {

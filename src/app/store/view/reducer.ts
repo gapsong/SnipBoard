@@ -3,6 +3,7 @@ import { DashboardActionTypes, DashboardState, actionType } from './types';
 
 export const initialState: DashboardState = {
     views: {},
+    viewOrder: [],
 };
 
 const reducer: Reducer<DashboardState> = (state = initialState, action: actionType) => {
