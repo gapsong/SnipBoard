@@ -12,14 +12,26 @@ const reducer: Reducer<DashboardState> = (state = initialState, action: actionTy
             return { ...state, ...action.payload };
         }
         case DashboardActionTypes.CREATE_VIEW: {
-            return { ...state, views: { ...state.views, [action.payload.id]: action.payload } };
+            return {
+                ...state,
+                views: { ...state.views, [action.payload.id]: action.payload },
+                viewOrder: [...state.viewOrder, action.payload.id],
+            };
         }
         case DashboardActionTypes.DELETE_VIEW: {
             delete state.views[action.payload.id];
-            return { ...state, views: { ...state.views } };
+            return { ...state, ...state.views, views: { ...state.views } };
         }
-        case DashboardActionTypes.ON_DRAG: {
-            return { ...state, views: { ...state.views, ...{ [action.payload.id]: action.payload } } };
+        case DashboardActionTypes.UPDATE_VIEW: {
+            const id = action.payload.id;
+            const temp = state.viewOrder.filter((item) => {
+                return item !== id;
+            });
+            return {
+                ...state,
+                views: { ...state.views, ...{ [id]: action.payload } },
+                viewOrder: [...temp, id],
+            };
         }
         default: {
             return state;

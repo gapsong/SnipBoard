@@ -8,6 +8,7 @@ import { DraggableView } from './DraggableView';
 const Dashboard: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const views = useSelector((state: ApplicationState) => state.dashboard.views);
+    const viewOrder = useSelector((state: ApplicationState) => state.dashboard.viewOrder);
 
     const dispatchSaveDashboard = () => {
         dispatch(saveDashboard());
@@ -20,7 +21,7 @@ const Dashboard: React.FunctionComponent = () => {
     return (
         <div>
             {Object.keys(views).map(function (key, index) {
-                return <DraggableView key={key} {...views[key]} />;
+                return <DraggableView zIndex={viewOrder.findIndex((item) => item == key)} key={key} {...views[key]} />;
             })}
             <Button variant='contained' color='primary' onClick={dispatchCreateView}>
                 Createview

@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { WebviewTag } from 'electron';
+import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
 import { useDispatch } from 'react-redux';
+import { Webview } from '@app/components/Webview/Webview';
+import { WebviewTag } from 'electron';
 import { updateViewPosition, deleteView } from '@src/app/store/view/action';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -23,9 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const DraggableView: React.FunctionComponent<ViewConfig> = ({ id, url, rect }) => {
+const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = ({ zIndex, id, url, rect }) => {
     const classes = useStyles();
-    const inputEl = useRef(null);
     const dispatch = useDispatch();
     const [urlValue, setUrl] = useState(url);
     const [shownUrl, setShownUrl] = useState('https://soundcloud.com');
@@ -60,7 +60,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = ({ id, url, rect }) =
                 width: '100%',
                 position: 'fixed',
                 top: 0,
-                zIndex: 9000,
+                zIndex: zIndex,
             }}
         >
             <Rnd
@@ -93,7 +93,6 @@ const DraggableView: React.FunctionComponent<ViewConfig> = ({ id, url, rect }) =
                                     variant='contained'
                                     color='primary'
                                     onClick={() => {
-                                        inputEl
                                         const wv = document.getElementById(id) as WebviewTag;
                                         if (wv.canGoBack()) {
                                             wv.goBack();
@@ -146,7 +145,7 @@ const DraggableView: React.FunctionComponent<ViewConfig> = ({ id, url, rect }) =
                         </Grid>
                     </Grid>
                 </div>
-                <webview id={id} style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
+                <Webview id={id} url={shownUrl} />
                 <div>Footnote</div>
             </Rnd>
         </div>
