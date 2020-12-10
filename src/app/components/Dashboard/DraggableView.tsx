@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
+import { WebviewTag } from 'electron';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
 import { useDispatch } from 'react-redux';
 import { updateViewPosition, deleteView } from '@src/app/store/view/action';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexGrow: 1,
+        },
+        paper: {
+            padding: theme.spacing(2),
+            textAlign: 'center',
+            color: theme.palette.text.secondary,
+        },
+    })
+);
 
 const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
+    const classes = useStyles();
     const dispatch = useDispatch();
     const id = prop.id;
     const [urlValue, setUrl] = useState(prop.url);
@@ -65,37 +84,64 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                 onResizeStop={dispatchViewPosition}
             >
                 <div>
-                    <Button variant='contained' color='primary'>
-                        Back
-                    </Button>
-                    <Button variant='contained' color='primary'>
-                        Forward
-                    </Button>
-                    <TextField
-                        label='Standard'
-                        type='text'
-                        value={urlValue}
-                        onKeyPress={(ev) => {
-                            console.log(`Pressed keyCode ${ev.key}`);
-                            if (ev.key === 'Enter') {
-                                // Do code here
-                                ev.preventDefault();
-                                const prefix = 'https://';
-                                let temp;
-                                if (urlValue.substr(0, prefix.length) !== prefix) {
-                                    temp = prefix + urlValue;
-                                }
-                                setShownUrl(temp);
-                            }
-                        }}
-                        onChange={(event) => setUrl(event.target.value)}
-                    />
-                    <Button variant='contained' color='primary' onClick={dispatchDelete}>
-                        Delete View
-                    </Button>
+                    <Grid container spacing={3}>
+                        <Grid item xs>
+                            <Paper className={classes.paper}>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={() => {
+                                        const wv = document.getElementById('webview1');
+                                        (wv as WebviewTag).goBack();
+                                    }}
+                                >
+                                    Back
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={() => {
+                                        const wv = document.getElementById('webview1');
+                                        (wv as WebviewTag).goForward();
+                                    }}
+                                >
+                                    Forward
+                                </Button>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper className={classes.paper}>
+                                <TextField
+                                    label='Standard'
+                                    type='text'
+                                    value={urlValue}
+                                    onKeyPress={(ev) => {
+                                        console.log(`Pressed keyCode ${ev.key}`);
+                                        if (ev.key === 'Enter') {
+                                            // Do code here
+                                            ev.preventDefault();
+                                            const prefix = 'https://';
+                                            let temp;
+                                            if (urlValue.substr(0, prefix.length) !== prefix) {
+                                                temp = prefix + urlValue;
+                                            }
+                                            setShownUrl(temp);
+                                        }
+                                    }}
+                                    onChange={(event) => setUrl(event.target.value)}
+                                />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs>
+                            <Paper className={classes.paper}>
+                                <Button variant='contained' color='primary' onClick={dispatchDelete}>
+                                    Delete View
+                                </Button>
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </div>
-
-                <webview style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
+                <webview id='webview1' style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
                 <div>Footnote</div>
             </Rnd>
         </div>
