@@ -21,7 +21,7 @@ const createView = () => {
         mainWindow = new BrowserWindow({
             x: externalDisplay.bounds.x + 1200,
             y: externalDisplay.bounds.y + 300,
-            width: 900,
+            width: 2000,
             height: 600,
             webPreferences: {
                 webviewTag: true,

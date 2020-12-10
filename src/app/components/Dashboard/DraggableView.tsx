@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { Rnd } from 'react-rnd';
 import { ViewConfig } from '@types';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateViewPosition, updateUrl, deleteView } from '@src/app/store/view/action';
+import { useDispatch } from 'react-redux';
+import { updateViewPosition, deleteView } from '@src/app/store/view/action';
 
 const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     const dispatch = useDispatch();
@@ -29,10 +29,6 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
     };
 
     const dispatchDelete = () => {
-        dispatch(deleteView(id));
-    };
-
-    const dispatchCrop = () => {
         dispatch(deleteView(id));
     };
 
@@ -69,6 +65,12 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                 onResizeStop={dispatchViewPosition}
             >
                 <div>
+                    <Button variant='contained' color='primary'>
+                        Back
+                    </Button>
+                    <Button variant='contained' color='primary'>
+                        Forward
+                    </Button>
                     <TextField
                         label='Standard'
                         type='text'
@@ -91,12 +93,9 @@ const DraggableView: React.FunctionComponent<ViewConfig> = (prop) => {
                     <Button variant='contained' color='primary' onClick={dispatchDelete}>
                         Delete View
                     </Button>
-                    <Button variant='contained' color='primary' onClick={dispatchCrop}>
-                        Crop View
-                    </Button>
                 </div>
 
-                <webview style={{ width: '100%', height: '100%' }} src={shownUrl} />
+                <webview style={{ width: '100%', height: '100%', minHeight: '100px' }} src={shownUrl} />
                 <div>Footnote</div>
             </Rnd>
         </div>

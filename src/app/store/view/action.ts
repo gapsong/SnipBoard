@@ -48,8 +48,8 @@ export const createView = (): AnyAction => {
         url: 'localhost:9000',
         x: 20,
         y: 50,
-        width: 500,
-        height: 200,
+        width: 1000,
+        height: 300,
     };
 
     return {
