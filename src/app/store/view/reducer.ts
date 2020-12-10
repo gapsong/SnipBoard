@@ -8,9 +8,6 @@ export const initialState: DashboardState = {
 
 const reducer: Reducer<DashboardState> = (state = initialState, action: actionType) => {
     switch (action.type) {
-        case DashboardActionTypes.INIT_DASHBOARD: {
-            return { ...state, ...action.payload };
-        }
         case DashboardActionTypes.CREATE_VIEW: {
             return {
                 ...state,

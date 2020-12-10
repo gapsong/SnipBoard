@@ -1,46 +1,13 @@
-import { ActionCreator, Action, AnyAction, Dispatch } from 'redux';
+import { ActionCreator, Action, AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import axios from 'axios';
 
 import { v1 as uuidv1 } from 'uuid';
-import { ViewConfig, DragConfig } from '@types';
+import { ViewConfig } from '@types';
 
-import { DashboardActionTypes, actionType } from './types';
+import { DashboardActionTypes } from './types';
 import { ApplicationState } from '../index';
 
 export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, Action<string>>>;
-
-export const fetchRequest: AppThunk = () => {
-    return (dispatch: Dispatch) => {
-        try {
-            dispatch({
-                type: DashboardActionTypes.FETCH_REQUEST,
-            });
-
-            return axios({
-                method: 'GET',
-                url: 'http://localhost:3001/products',
-                responseType: 'json',
-            }).then((response) =>
-                dispatch({
-                    type: DashboardActionTypes.FETCH_SUCCESS,
-                    payload: response.data,
-                })
-            );
-        } catch (e) {
-            return dispatch({
-                type: DashboardActionTypes.FETCH_ERROR,
-            });
-        }
-    };
-};
-
-export const initDashboard = (data: string): actionType => {
-    return {
-        type: DashboardActionTypes.INIT_DASHBOARD,
-        payload: data,
-    };
-};
 
 export const createView = (): AnyAction => {
     const viewConfig: ViewConfig = {
@@ -95,27 +62,6 @@ export const deleteView = (id: string): AnyAction => {
 export const dragView = (dragConfig: ViewConfig): AnyAction => {
     return {
         type: DashboardActionTypes.ON_DRAG,
-        payload: dragConfig,
-    };
-};
-
-export const onDragStart = (id: string): AnyAction => {
-    return {
-        type: DashboardActionTypes.ON_DRAG_START,
-        payload: { id },
-    };
-};
-
-export const onDragEnd = (dragConfig: DragConfig): AnyAction => {
-    return {
-        type: DashboardActionTypes.ON_DRAG_END,
-        payload: dragConfig,
-    };
-};
-
-export const dragViewDashboard = (dragConfig: DragConfig): AnyAction => {
-    return {
-        type: DashboardActionTypes.GET_ABSOLUTE_POSITION,
         payload: dragConfig,
     };
 };
