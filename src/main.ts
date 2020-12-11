@@ -1,4 +1,4 @@
-import { Screen, screen, BrowserView, app, BrowserWindow } from 'electron';
+import { Screen, screen, app, BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
