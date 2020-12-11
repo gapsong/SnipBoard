@@ -53,6 +53,10 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
         dispatch(deleteView(id));
     };
 
+    const cropView = () => {
+        return;
+    };
+
     return (
         <div
             style={{
@@ -113,7 +117,7 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
                                 </Button>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <TextField
                                     label='Standard'
@@ -134,6 +138,20 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
                                     }}
                                     onChange={(event) => setUrl(event.target.value)}
                                 />
+                            </Paper>
+                        </Grid>{' '}
+                        <Grid item xs={3}>
+                            <Paper className={classes.paper}>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={() => {
+                                        const wv = document.getElementById(id) as WebviewTag;
+                                        wv.openDevTools();
+                                    }}
+                                >
+                                    Open Dev Tools View
+                                </Button>
                             </Paper>
                         </Grid>
                         <Grid item xs>
