@@ -4,6 +4,7 @@ import { routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
 import { ApplicationState, createRootReducer } from '.';
 
+
 export const configureStore = (history: History, initialState: ApplicationState): Store<ApplicationState> => {
     const store = createStore(
         createRootReducer(history),

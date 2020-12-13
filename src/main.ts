@@ -1,4 +1,4 @@
-import { Screen, screen, app, BrowserWindow } from 'electron';
+import { Screen, screen, app, BrowserWindow, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -55,4 +55,8 @@ app.whenReady()
 
 app.on('window-all-closed', () => {
     app.quit();
+});
+
+ipcMain.on('@@sendViewport', (event, arg) => {
+    console.log('heyyyy', arg); // prints "heyyyy ping"
 });
