@@ -54,6 +54,7 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
     };
 
     const cropView = () => {
+        console.log('cropview12345');
         return;
     };
 
@@ -142,25 +143,13 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
                         </Grid>{' '}
                         <Grid item xs={2}>
                             <Paper className={classes.paper}>
-                                <TextField
-                                    label='Standard'
-                                    type='text'
-                                    value={urlValue}
-                                    onKeyPress={(ev) => {
-                                        console.log(`Pressed keyCode ${ev.key}`);
-                                        if (ev.key === 'Enter') {
-                                            // Do code here
-                                            ev.preventDefault();
-                                            const prefix = 'https://';
-                                            let temp;
-                                            if (urlValue.substr(0, prefix.length) !== prefix) {
-                                                temp = prefix + urlValue;
-                                            }
-                                            setShownUrl(temp);
-                                        }
-                                    }}
-                                    onChange={(event) => setUrl(event.target.value)}
-                                />
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={cropView}
+                                >
+                                    Crop
+                                </Button>
                             </Paper>
                         </Grid>{' '}
                         <Grid item xs={2}>
