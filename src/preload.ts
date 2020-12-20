@@ -11,8 +11,6 @@ contextBridge.exposeInMainWorld('api', {
         request: (data: string) => {
             // whitelist channels
         // @ts-ignore
-        ipcRenderer.sendToHost(data);
-        // @ts-ignore
         ipcRenderer.send(SEND_VIEWPORT, data);
     },
     //receive: (channel, func) => {
