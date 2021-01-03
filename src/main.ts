@@ -5,40 +5,27 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 let mainWindow: BrowserWindow;
-let electronScreen: Screen;
 
 const createView = () => {
-    electronScreen = screen;
-    const displays = electronScreen.getAllDisplays();
-    let externalDisplay = null;
-    for (const i in displays) {
-        if (displays[i].bounds.x != 0 || displays[i].bounds.y != 0) {
-            externalDisplay = displays[i];
-            break;
-        }
-    }
-
-    if (externalDisplay) {
-        mainWindow = new BrowserWindow({
-            x: externalDisplay.bounds.x + 1200,
-            y: externalDisplay.bounds.y + 300,
-            width: 2000,
-            height: 600,
-            webPreferences: {
-                webviewTag: true,
-                nodeIntegration: false,
-                contextIsolation: true,
-                preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-            },
-        });
-    }
+    mainWindow = new BrowserWindow({
+        x: 1200,
+        y: 300,
+        width: 600,
+        height: 600,
+        webPreferences: {
+            webviewTag: true,
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        },
+    });
 
     const startUrl = MAIN_WINDOW_WEBPACK_ENTRY;
 
     mainWindow.loadURL(startUrl);
     mainWindow.webContents.on('did-finish-load', () => {
         if (isDev) {
-            mainWindow.webContents.openDevTools();
+            // mainWindow.webContents.openDevTools();
         }
     });
 };
@@ -58,5 +45,5 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('@@sendViewport', (event, arg) => {
     console.log('heyyyy', arg); // prints "heyyyy ping"
-    mainWindow.webContents.send('@@sendViewport', 'message')
+    mainWindow.webContents.send('@@sendViewport', arg);
 });

@@ -28,7 +28,7 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
     const classes = useStyles();
     const dispatch = useDispatch();
     const [urlValue, setUrl] = useState(url);
-    const [shownUrl, setShownUrl] = useState('https://soundcloud.com');
+    const [shownUrl, setShownUrl] = useState('https://de.wikipedia.org/wiki/Tiger');
     const [x, setX] = useState(rect.x);
     const [y, setY] = useState(rect.y);
     const [width, setWidth] = useState(rect.width);
@@ -56,7 +56,7 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
     const cropView = () => {
         const wv = document.getElementById(id) as WebviewTag;
         wv.addEventListener('ipc-message', (event: IpcMessageEvent) => {
-            console.log(event.channel)
+            console.log(event.channel);
         });
 
         wv.executeJavaScript(`var isHover = false;
@@ -219,6 +219,8 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
                     border: 'solid 2px #ddd',
                     display: 'flex',
                     flexDirection: 'column',
+                    borderRadius: '5px',
+                    background: 'white',
                 }}
                 size={{ width, height }}
                 position={{ x, y }}
@@ -236,86 +238,67 @@ const DraggableView: React.FunctionComponent<{ zIndex: number } & ViewConfig> = 
                 }}
                 onResizeStop={dispatchViewPosition}
             >
-                <div>
-                    <Grid container spacing={3}>
-                        <Grid item xs>
-                            <Paper className={classes.paper}>
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={() => {
-                                        const wv = document.getElementById(id) as WebviewTag;
-                                        if (wv.canGoBack()) {
-                                            wv.goBack();
-                                        }
-                                    }}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={() => {
-                                        const wv = document.getElementById(id) as WebviewTag;
-                                        wv.goForward();
-                                    }}
-                                >
-                                    Forward
-                                </Button>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Paper className={classes.paper}>
-                                <TextField
-                                    label='Standard'
-                                    type='text'
-                                    value={urlValue}
-                                    onKeyPress={(ev) => {
-                                        console.log(`Pressed keyCode ${ev.key}`);
-                                        if (ev.key === 'Enter') {
-                                            // Do code here
-                                            ev.preventDefault();
-                                            const prefix = 'https://';
-                                            let temp;
-                                            if (urlValue.substr(0, prefix.length) !== prefix) {
-                                                temp = prefix + urlValue;
-                                            }
-                                            setShownUrl(temp);
-                                        }
-                                    }}
-                                    onChange={(event) => setUrl(event.target.value)}
-                                />
-                            </Paper>
-                        </Grid>{' '}
-                        <Grid item xs={2}>
-                            <Paper className={classes.paper}>
-                                <Button variant='contained' color='primary' onClick={cropView}>
-                                    Crop
-                                </Button>
-                            </Paper>
-                        </Grid>{' '}
-                        <Grid item xs={2}>
-                            <Paper className={classes.paper}>
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={() => {
-                                        const wv = document.getElementById(id) as WebviewTag;
-                                        wv.openDevTools();
-                                    }}
-                                >
-                                    Dev Tools View
-                                </Button>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs>
-                            <Paper className={classes.paper}>
-                                <Button variant='contained' color='primary' onClick={dispatchDelete}>
-                                    Delete View
-                                </Button>
-                            </Paper>
-                        </Grid>
-                    </Grid>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'content' }}>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            onClick={() => {
+                                const wv = document.getElementById(id) as WebviewTag;
+                                if (wv.canGoBack()) {
+                                    wv.goBack();
+                                }
+                            }}
+                        >
+                            {`<`}
+                        </Button>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            onClick={() => {
+                                const wv = document.getElementById(id) as WebviewTag;
+                                wv.goForward();
+                            }}
+                        >
+                            {`>`}
+                        </Button>
+                    </div>
+
+                    <TextField
+                        type='url'
+                        value={urlValue}
+                        variant='outlined'
+                        onKeyPress={(ev) => {
+                            console.log(`Pressed keyCode ${ev.key}`);
+                            if (ev.key === 'Enter') {
+                                // Do code here
+                                ev.preventDefault();
+                                const prefix = 'https://';
+                                let temp;
+                                if (urlValue.substr(0, prefix.length) !== prefix) {
+                                    temp = prefix + urlValue;
+                                }
+                                setShownUrl(temp);
+                            }
+                        }}
+                        onChange={(event) => setUrl(event.target.value)}
+                    />
+                    <Button variant='contained' color='primary' onClick={cropView}>
+                        Crop
+                    </Button>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={() => {
+                            const wv = document.getElementById(id) as WebviewTag;
+                            wv.openDevTools();
+                        }}
+                    >
+                        Dev Tools View
+                    </Button>
+                    <Button variant='contained' color='primary' onClick={dispatchDelete}>
+                        X{' '}
+                    </Button>
                 </div>
                 <Webview id={id} url={shownUrl} />
                 <div>Footnote</div>

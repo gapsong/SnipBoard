@@ -7,7 +7,7 @@ import { ApplicationState, createRootReducer } from '.';
 const initListener = () => {
     //create all listeners
     // @ts-ignore
-    window.api.response('@@sendViewport', function (...args) {
+    window.api.response('@@sendViewport', function (args) {
         console.log(args);
     });
 };

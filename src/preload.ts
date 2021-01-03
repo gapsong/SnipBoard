@@ -8,8 +8,8 @@ const validChannels = [PONG, UPDATE_URL, INIT_DASHBOARD, UPDATE_VIEW_POSITION, C
 contextBridge.exposeInMainWorld('api', {
     MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: __dirname,
     //send: (channel, data) => {
-        request: (data: string) => {
-            // whitelist channels
+    request: (data: string) => {
+        // whitelist channels
         // @ts-ignore
         ipcRenderer.send(SEND_VIEWPORT, data);
     },
